@@ -1,0 +1,688 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h2>Импорт прайсов партнерских складов</h2>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  
+  <div class="container-fluid">
+    <div id="message">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible" id="alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible" id="alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+	</div>
+	
+	<ul class="nav nav-tabs">
+			<li class="active"><a href="#tab-import" data-toggle="tab">Закачка</a></li>
+			<li><a href="#tab-browse" data-toggle="tab">Результат</a></li>
+			{% if config_pumpprice_debug == '1' %}
+			<li><a href="#tab-settings" data-toggle="tab">Настройка</a></li>
+			<li><a href="#tab-logerror" data-toggle="tab">Протокол ошибок</a></li>
+			<li><a href="#tab-logspump" data-toggle="tab">Протокол закачки</a></li>
+			{% endif %}
+	</ul>
+
+	<div class="tab-content">
+
+	   <div class="tab-pane  active" id="tab-import">
+			<div >
+				<form action="{{ import }}" method="post" enctype="multipart/form-data" id="import" class="form-horizontal">
+					<input type="hidden" name="location_id" value="{{pumpprice_currency}}" />
+					<h3>1. Настройка параметров импорта </h3>
+					<div >
+						<span>Партнер</span>&nbsp;&nbsp;&nbsp;&nbsp;
+						<select name="pumpprice_currency" id="setting_currency" class="form-control" onchange="LocationChange(event.target.value)" style="display: inline-block; width: 150px;" >
+                     {% if (pumpprice_currency == '') or (pumpprice_currency == '0')  %}
+							<option value="0" selected="selected">{{ text_none }}</option>
+                     {%  else  %}
+							<option value="0">{{ text_none }}</option>
+                     {% endif %}
+                     {% for currency in currencies %} 
+                          {%   if currency.id == pumpprice_currency %}
+							<option value="{{currency.id}}" selected="selected">{{currency.title}}&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                          {%   else %}
+							<option value="{{currency.id}}">{{currency.title}}&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                          {%   endif %}
+                     {% endfor %}
+						</select><br /><br />
+					</div>
+		{% for sett in currencies %}
+		   {% set sett_location_id = sett['id'] %} 
+			<div class="divform{{sett_location_id}}" style="display: {% if sett_location_id == pumpprice_currency %}inline{% else %}none{% endif %};">
+				<div style="display: inline-block; float: left;"><span>Валюта партнера</span></div><div><h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{sett['code']}}</h4></div>
+				<div style="display: inline-block; float: left;"><span>Курс к гривне</span></div><div><h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{sett['curr_change']}}</h4></div>
+				<div style="display: inline-block; float: left;"><span>Каталог по умолчанию</span></div><div><h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{sett['ctgrname']}}</h4></div>
+		    </div>
+	    {% endfor %}
+					<div>
+						<div style="height: 20px; line-height: 5px;"><br />
+							<label for="upload" class="btn" style="border: 1px solid #666; float: left;">Выберите файл для загрузки&nbsp;&nbsp;</label><input type="file" style="visibility:hidden;" name="upload" id="upload" />&nbsp;&nbsp;&nbsp;&nbsp;<label class="fn_choosed" style="vertical-align: middle; vertical-align: middle;"></label>
+						</div>
+						<div> <br /><br />
+							<h3>2. Импорт прайса в промежуточную таблицу </h3>
+							<div>
+								<div class="buttons"><a onclick="uploadData();" class="btn btn-primary"><span>Импортирование прайса из файла</span></a></div>
+							</div>
+						</div>
+					</div>
+				</form><br />
+		{% for sett in currencies %}
+		   {% set sett_location_id = sett['id'] %} 
+			<div class="divform{{sett_location_id}}" style="display: {% if sett_location_id == pumpprice_currency %}inline{% else %}none{% endif %};">
+				<div style="display: inline-block; float: left;"><span>Из прайса импортировано&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="import_count"><h4>{{sett['import_count']}}</h4></div>
+		    </div>
+			{% if sett_location_id == 1001 and showbutton_deletedoublerec == 1 %}
+		    <div class="divform{{sett_location_id}}" style="display: {% if sett_location_id == pumpprice_currency %}inline{% else %}none{% endif %};">
+			   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			   <button type="button" data-toggle="tooltip" title="Удвоенные записи привести к одной с МИНИМАЛЬНОЙ ценой и количеством" class="btn btn-danger" onclick="confirm('Из удвоенных записей оставить одну с минимальной ценой и количеством ?') ? deletedoubleprices({{sett_location_id}}) : false;"><i class="fa fa-trash-o"></i></button>
+			</div>
+			{% endif %}    	
+	    {% endfor %}
+		
+					<div>
+						<div> <br /><br />
+						<form action="{{ partner_compare_product }}" method="post" enctype="multipart/form-data" id="partner_compare_product" class="form-horizontal">
+							<h3>3. Проверка соответствия товаров и добавление новых </h3>
+							<input type="hidden" name="location_id" value="{{pumpprice_currency}}" />
+							<div>
+								<div class="buttons"><a onclick="partner_compare_product();" class="btn btn-primary"><span>Добавить новые товары</span></a></div>
+							</div>
+						</form>
+						</div>
+					</div>
+		{% for sett in currencies %}
+		   {% set sett_location_id = sett['id'] %} 
+			<div class="divform{{sett_location_id}}" style="display: {% if sett_location_id == pumpprice_currency %}inline{% else %}none{% endif %};">
+				<div style="display: inline-block; float: left;"><span>Найдено соответствие товаров&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="partner_compare_product_count"><h4>{{sett['partner_compare_product_count']}}</h4></div>
+		    </div>
+	    {% endfor %}
+
+					<div>
+						<div> <br /><br />
+						<form action="{{ partner_set_extra }}" method="post" enctype="multipart/form-data" id="partner_set_extra" class="form-horizontal">
+							<h3>4. Выполнение Переоценки и внесение остатков </h3>
+							<input type="hidden" name="location_id" value="{{pumpprice_currency}}" />
+							<div>
+								<div class="buttons"><a onclick="partner_set_extra();" class="btn btn-primary"><span>Применить Цены и Наличие</span></a></div>
+							</div>
+						</form>
+						</div>
+					</div>
+		{% for sett in currencies %}
+		   {% set sett_location_id = sett['id'] %} 
+			<div class="divform{{sett_location_id}}" style="display: {% if sett_location_id == pumpprice_currency %}inline{% else %}none{% endif %};">
+				<div style="display: inline-block; float: left;"><span>Товаров обработано&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div><div class="partner_set_extra_count"><h4>{{sett['partner_set_extra_count']}}</h4></div>
+		    </div>
+	    {% endfor %}
+
+
+		    </div>
+	   </div>
+	  
+	   <div class="tab-pane" id="tab-browse">
+			<div>{{ form_browse }}</div>
+       </div> 
+
+{% if config_pumpprice_debug == '1' %}
+	   <div class="tab-pane" id="tab-settings">
+		{% for key, sett in settings_array %}
+		   {% set currency = key %} 
+		   {% set sett_location_id = sett['location_id'] %} 
+		<div class="divform{{sett_location_id}}" style="display: {% if sett_location_id == pumpprice_currency %}inline{% else %}none{% endif %};" >
+	      <form action="{{ settings }}" method="post" enctype="multipart/form-data" id="settings_{{sett_location_id}}" class="form-horizontal">
+			<input type="hidden" name="pumpprice_{{sett_location_id}}_currency" value="{{currency}}" />
+			<input type="hidden" name="pumpprice_currency" value="{{sett_location_id}}" />
+		    <table class="form">
+			     <tr>
+			        <td> <label>Валюта закачки: </label> </td> 
+			        <td>
+				       <label><span>{{sett_location_id}} - {{currency}} - {{sett.title}}</span></label>
+                    </td>
+			        <td>&nbsp;&nbsp;&nbsp;&nbsp;<span> (обяз.поле)</span></td>
+			     </tr>
+			     <tr>
+			        <td> <label>{% if sett['partner_module'] == 'csv' %}Разделитель столбцов: {% else %} Наим-е Листа в Excel-файле для закачки: {% endif %}</label></td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_sheetname" value="{{ sett['pumpprice_'~sett_location_id~'_sheetname'] }}" placeholder="Лист2" /></td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span>{% if sett['partner_module'] == 'csv' %} (обяз.поле, обычно это символ ";") {% else %} (обяз.поле, обычно называется "Лист1") {% endif %}</span> </td>
+			     </tr>
+			     <tr>
+			        <td> <label>Начало закачиваемых данных строка (включительно): </label> </td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_firstrow" value="{{sett['pumpprice_'~sett_location_id~'_firstrow'] }}"  placeholder=">= 1"/> </td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> (пустое знач-е => закачивать с 1й строки)</span> </td>
+			     </tr>
+			     <tr>
+			        <td> <label>Последняя строка закачиваемых данных (включительно): </label> </td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_lastrow" value="{{ sett['pumpprice_'~currsett_location_idency~'_lastrow'] }}" placeholder=">= 1" /> </td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> (пустое знач-е => закачивать все строки)</span>	</td>
+			     </tr>
+			     <tr>
+			        <td> <label>Номер столбца "Номенклатура": </label> </td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_name" value="{{ sett['pumpprice_'~sett_location_id~'_name'] }}" /> </td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> (пустое знач-е => Не закачивать; отображать Наимен-е из действующих товаров)</span> </td>
+			     </tr>
+			     <tr>
+			        <td> <label>Номер столбца "Артикул": </label></td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_modelnum" value="{{ sett['pumpprice_'~sett_location_id~'_modelnum'] }}" placeholder=">= 1" /></td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> (обяз.поле, нумерация столбцов в закачиваемом Excel с "1")</span> </td>
+			     </tr>
+			     <tr>
+			        <td> <label>Номер столбца "Производитель": </label></td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_manufacture" value="{{ sett['pumpprice_'~sett_location_id~'_manufacture'] }}" placeholder=">= 1" /></td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> (oc_product.manufacturer_id -> manufacturer.name. Если не найдено, ищем соответствие по таблице oc_partner_brand)</span> </td>
+   			     </tr>
+		   	     <tr>
+			        <td> <label>Номер столбца "Автопроизводитель": </label></td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_automanufacture" value="{{ sett['pumpprice_'~sett_location_id~'_automanufacture'] }}" placeholder=">= 1" /></td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> (дополнительно уточняет поле Производитель)</span> </td>
+			     </tr>
+			     <tr>
+			        <td> <label>Номер столбца "Номер автопроизводителя": </label></td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_automanufacture_number" value="{{ sett[ 'pumpprice_'~sett_location_id~'_automanufacture_number'] }}" placeholder=">= 1" /></td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> (дополнительно уточняет поле Производитель)</span> </td>
+			     </tr>
+			     <tr>
+			        <td> <label>Номер столбца "Цена": </label> </td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_price" value="{{ sett['pumpprice_'~sett_location_id~'_price'] }}"   placeholder=">= 1"/> </td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> (обяз.поле)</span> </td>
+			     </tr>
+			     <tr>
+			        <td> <label>Номер столбца "Наличие": </label> </td>
+			        <td> <input type="text" name="pumpprice_{{sett_location_id}}_quantity" value="{{ sett['pumpprice_'~sett_location_id~'_quantity'] }}"   placeholder=">= 1"/> </td>
+			        <td> &nbsp;&nbsp;&nbsp;&nbsp;<span> ((пустое знач-е => Не закачивать; отображать "0"; Через "+" можно суммировать значения нескольких столбцов))</span> </td>
+			     </tr>
+			     <tr>
+			        <td><label>Проверять уникальность "Артикул" в разрезе выбранной валюты</label></td>
+			        <td>{% if (sett['pumpprice_'~sett_location_id~'_nonUniquiModelPump'] == '1') %}
+				      <input type="radio" name="pumpprice_{{sett_location_id}}_nonUniquiModelPump" value="1" checked="checked" />
+					        ДА  
+        					<br />
+				      <input type="radio" name="pumpprice_{{sett_location_id}}_nonUniquiModelPump" value="0" />
+					        НЕТ  
+				        {% else %}
+				      <input type="radio" name="pumpprice_{{sett_location_id}}_nonUniquiModelPump" value="1" />
+					        ДА 
+					        <br />
+				      <input type="radio" name="pumpprice_{{sett_location_id}}_nonUniquiModelPump" value="0" checked="checked" />
+					        НЕТ  
+				       {% endif %}
+			        </td>
+			        <td>ЕСЛИ проверка == ДА >> осуществляем проверку моделей на уникальность перед закачкой. Закачка останавливается, если есть НЕ уникальные записи Модели. Результат проверки в файле лога.</td>
+			     </tr>
+
+			     <tr>
+			        <td>
+			           <label>Перезаписывать похожую запись при импорте?</label>
+                    </td>
+                    <td> 
+			      {% if (sett['pumpprice_'~sett_location_id~'_incremental'] == '1') %}
+			           <input type="radio" name="pumpprice_{{sett_location_id}}_incremental"  value="1" checked="checked" />
+					Да  
+					<br />
+			           <input type="radio" name="pumpprice_{{sett_location_id}}_incremental" value="0" />
+					Нет  
+			      {% else %}
+			           <input type="radio" name="pumpprice_{{sett_location_id}}_incremental" value="1" />
+					Да  
+					<br />
+			           <input type="radio" name="pumpprice_{{sett_location_id}}_incremental" value="0" checked="checked" />
+					Нет  
+			     {% endif %}
+					<br /><br />
+                    </td>
+			        <td>выбор ДА == из нескольких похожих записей оставит крайнюю запись <br /> НЕТ == закачивает данные быстро, т.к. нет анализа на уникальность</td>
+			     </tr>
+
+
+    			 <tr>
+		    	    <td class="buttons">
+				       <a onclick="updateSettings('{{currency}}','{{sett.location_id}}');" class="btn btn-primary"><span>Применить настройку</span></a>
+			        </td>
+			     </tr>
+		    </table>
+	      </form>
+	   </div>
+	    {% endfor %}
+	   </div>
+
+     <div class="tab-pane" id="tab-logerror">
+        <div class="page-header">
+           <div class="container-fluid">
+              <div class="pull-right">
+                 <a href="{{ download }}" data-toggle="tooltip" title="{{ button_download }}" class="btn btn-primary"><i class="fa fa-download"></i></a>
+                 <a onclick="confirm('{{ text_confirm }}') ? location.href='{{ clear }}' : false;" data-toggle="tooltip" title="{{ button_clear }}" class="btn btn-danger"><i class="fa fa-eraser"></i></a>
+              </div>
+           </div>
+        </div>
+  	    <input type="hidden" name="location_id" value="" />
+        <div class="container-fluid">
+           <div class="panel panel-default">
+              <div class="panel-heading">
+                 <h3 class="panel-title"><i class="fa fa-exclamation-triangle"></i> Общий протокол ошибок</h3>
+              </div>
+              <div class="panel-body">
+                 <textarea wrap="off" rows="15" readonly class="form-control">{{ log }}</textarea>
+              </div>
+           </div>
+        </div>
+	   </div>
+
+     <div class="tab-pane" id="tab-logspump">
+        <div class="page-header">
+        </div>
+	      <input type="hidden" name="location_id" value="" />
+        <div class="container-fluid">
+           <div class="panel panel-default">
+              <div class="panel-heading">
+                 <h3 class="panel-title"><i class="fa fa-exclamation-triangle"></i> Протокол обработанных строк из XLS</h3>
+              </div>
+              <div class="panel-body">
+                 <textarea wrap="off" rows="30" readonly class="form-control">{{ logpump }}</textarea>
+              </div>
+           </div>
+        </div>
+	   </div>
+
+{% endif %}				
+	</div>
+
+ 
+  </div>
+  
+</div>
+<script type="text/javascript">
+$('.date').datetimepicker({
+	language: 'ru',
+	pickTime: false
+});
+
+function getNotifications() {
+  return;
+	$('#export_import_notification').html('<i class="fa fa-info-circle"></i><button type="button" class="close" data-dismiss="alert">&times;</button> <div id="export_import_loading"><img src="view/image/export-import/loading.gif" />{{ text_loading_notifications }}</div>');
+	setTimeout(
+		function(){
+			$.ajax({
+				type: 'GET',
+				url: 'index.php?route=extension/export_import/getNotifications&user_token={{ user_token }}',
+				dataType: 'json',
+				success: function(json) {
+					if (json['error']) {
+						$('#export_import_notification').html('<i class="fa fa-info-circle"></i><button type="button" class="close" data-dismiss="alert">&times;</button> '+json['error']+' <span style="cursor:pointer;font-weight:bold;text-decoration:underline;float:right;" onclick="getNotifications();">{{ text_retry }}</span>');
+					} else if (json['message']) {
+						$('#export_import_notification').html('<i class="fa fa-info-circle"></i><button type="button" class="close" data-dismiss="alert">&times;</button> '+json['message']);
+					} else {
+						$('#export_import_notification').html('<i class="fa fa-info-circle"></i><button type="button" class="close" data-dismiss="alert">&times;</button> '+'{{ error_no_news }}');
+					}
+				},
+				failure: function(){
+					$('#export_import_notification').html('<i class="fa fa-info-circle"></i><button type="button" class="close" data-dismiss="alert">&times;</button> '+'{{ error_notifications }} <span style="cursor:pointer;font-weight:bold;text-decoration:underline;float:right;" onclick="getNotifications();">{{ text_retry }}</span>');
+				},
+				error: function() {
+					$('#export_import_notification').html('<i class="fa fa-info-circle"></i><button type="button" class="close" data-dismiss="alert">&times;</button> '+'{{ error_notifications }} <span style="cursor:pointer;font-weight:bold;text-decoration:underline;float:right;" onclick="getNotifications();">{{ text_retry }}</span>');
+				}
+			});
+		},
+		500
+	);
+}
+
+$(document).ready(function() {
+	
+	$('span.close').click(function() {
+		$(this).parent().remove();
+	});
+
+	$('a[data-toggle="tab"]').click(function() {
+		$('#export_import_notification').remove();
+	});
+
+	getNotifications();
+});
+
+
+function checkFileSize(id) {
+	// See also http://stackoverflow.com/questions/3717793/javascript-file-upload-size-validation for details
+	var input, file, file_size;
+
+	if (!window.FileReader) {
+		// The file API isn't yet supported on user's browser
+		return true;
+	}
+
+	input = document.getElementById(id);
+	if (!input) {
+		// couldn't find the file input element
+		return true;
+	}
+	else if (!input.files) {
+		// browser doesn't seem to support the `files` property of file inputs
+		return true;
+	}
+	else if (!input.files[0]) {
+		// no file has been selected for the upload
+		alert( "{{ error_select_file }}" );
+		return false;
+	}
+	else {
+		file = input.files[0];
+		file_size = file.size;
+		{% if ((post_max_size is defined) and (post_max_size)) %}
+		// check against PHP's post_max_size
+		post_max_size = {{ post_max_size }};
+		if (file_size > post_max_size) {
+			alert( "{{ error_post_max_size }}" );
+			return false;
+		}
+		{% endif %}
+		{% if ((upload_max_filesize is defined) and (upload_max_filesize)) %}
+		// check against PHP's upload_max_filesize
+		upload_max_filesize = {{ upload_max_filesize }};
+		if (file_size > upload_max_filesize) {
+			alert( "{{ error_upload_max_filesize }}" );
+			return false;
+		}
+		{% endif %}
+		return true;
+	}
+}
+
+function uploadData() {
+	if (checkFileSize('upload')) {
+			$('#import').submit();
+	}
+}
+
+function validate_date(value) {
+  var arrD = value.split("-");
+  //arrD[1] -= 1;
+  var d = new Date(arrD[0], arrD[1], arrD[2]);
+//  alert('date='+value+': '+arrD[0]+'-'+arrD[1]+'-'+arrD[2]);
+  if ((d.getFullYear() == arrD[0]) && (d.getMonth() == arrD[1]) && (d.getDate() == arrD[2])) {
+    return true;
+  } else {
+    alert("Введена некорректная дата!");
+    return false;
+  }
+}
+
+function isNumber(txt){ 
+	var regExp=/^[\d]{1,}$/;
+	return regExp.test(txt); 
+}
+
+$("#upload").change(function() {
+  filename = this.files[0].name;
+//  $('input[name=\'fn_choosed\']').val(filename);
+  $('.fn_choosed').html(filename);
+  console.log(filename);
+  $('.import_count>h4').html('0');
+  $('.partner_compare_product_count>h4').html('0');
+  $('.partner_set_extra_count>h4').html('0');
+  
+});
+
+function validateExportForm(currency, location_id) {
+	var curr_id = $("select[name=pumpprice_currency").val();
+	if ((curr_id=='') || (curr_id=='0')) {
+		alert('Выбор Партнера для закачки ОБЯЗАТЕЛЕН');
+		return false;
+	}
+	var tmpItemId = parseInt(curr_id);
+	if (tmpItemId <= 0) {
+		alert('Выбор Партнера для закачки ОБЯЗАТЕЛЕН!');
+		return false;
+	}
+
+	var tmp_int = $("input[name=pumpprice_"+location_id+"_modelnum]").val();
+	if ((tmp_int=='') || !isNumber(tmp_int)) {
+		alert('<<Номер столбца "Модель":>> должно быть цифровым и больше 1');
+		return false;
+	}
+	tmpItemId = parseInt(tmp_int);
+	if (tmpItemId <= 0) {
+		alert('<<Номер столбца "Модель":>> должно быть цифровым и больше 1');
+		return false;
+    }
+
+	tmp_int = $("input[name=pumpprice_"+location_id+"_sheetname]").val();
+	if (tmp_int=='') {
+		alert('<<Наим-е Листа в Excel-файле для закачки:>> обязательное');
+		return false;
+	}
+
+	tmp_int = $("input[name=pumpprice_"+location_id+"_firstrow]").val();
+//	alert('tmp_int='+tmp_int);
+	if ((!(tmp_int=='')) && !isNumber(tmp_int)) {
+		alert('<<Начало закачиваемых данных строка (включительно):>> должно быть цифровым и больше 1');
+		return false;
+	}
+	if (!(tmp_int=='')) {
+ 	    tmpItemId = parseInt(tmp_int);
+	    if (tmpItemId <= 0) {
+		  alert('<<Начало закачиваемых данных строка (включительно):>> должно быть цифровым и больше 1');
+		  return false;
+	    }
+	}
+
+	tmp_int = $("input[name=pumpprice_"+location_id+"_lastrow]").val();
+//	alert('tmp_int='+tmp_int);
+	if ((!(tmp_int=='')) && !isNumber(tmp_int)) {
+		alert('<<Последняя строка закачиваемых данных (включительно):>> должно быть цифровым и больше 1');
+		return false;
+	}
+	if (!(tmp_int=='')) {
+ 	    tmpItemId = parseInt(tmp_int);
+	    if (tmpItemId <= 0) {
+		  alert('<<Последняя строка закачиваемых данных (включительно):>> должно быть цифровым и больше 1');
+		  return false;
+	    }
+	}
+
+	tmp_int = $("input[name=pumpprice_"+location_id+"_name]").val();
+//	alert('tmp_int='+tmp_int);
+	if ((!(tmp_int=='')) && !isNumber(tmp_int)) {
+		alert('<<Номер столбца "Наименование":>> должно быть цифровым и больше 1');
+		return false;
+	}
+	if (!(tmp_int=='')) {
+ 	    tmpItemId = parseInt(tmp_int);
+	    if (tmpItemId <= 0) {
+		  alert('<<Номер столбца "Наименование":>> должно быть цифровым и больше 1');
+		  return false;
+	    }
+	}
+
+	tmp_int = $("input[name=pumpprice_"+location_id+"_price]").val();
+	if ((tmp_int=='') || !isNumber(tmp_int)) {
+		alert('<<Номер столбца "Текущая цена":>> должно быть цифровым и больше 1');
+		return false;
+	}
+	tmpItemId = parseInt(tmp_int);
+	if (tmpItemId <= 0) {
+		alert('<<Номер столбца "Текущая цена":>> должно быть цифровым и больше 1');
+		return false;
+    }
+
+	tmp_int = $("input[name=pumpprice_"+location_id+"_quantity]").val();
+//	alert('tmp_int='+tmp_int);
+	if (tmp_int=='') {
+		alert('<<1Новое кол-во:>> должно быть цифровым и больше 1');
+		return false;
+	} else {
+	  var arr = tmp_int.split('+');
+	  arr.forEach(function(tmp){
+	    if (tmp==''){
+		     alert('<<2Новое кол-во:>> должно быть цифровым и больше 1');
+		     return false;
+		}
+		if(isNumber(tmp)) {
+ 	       tmpItemId = parseInt(tmp_int);
+	       if (tmpItemId <= 0) {
+		     alert('<<3Новое кол-во:>> должно быть цифровым и больше 1');
+		     return false;
+	       }
+	    } else { 
+	        alert('<<4Новое кол-во:>> должно быть цифровым и больше 1');
+		    return false;
+		}
+      });
+	}
+
+//    alert('return true');
+	return true;
+}
+
+function downloadData() {
+	if (validateExportForm()) {
+		$('#export').submit();
+	}
+}
+
+function updateSettings(currency, location_id) {
+	if (validateExportForm(currency, location_id)) {
+	  $('#settings_'+location_id).submit();
+// alert('currency='+currency+'; location_id='+location_id);
+	}
+}
+
+function LocationChange(location_id){
+  //alert('location_id='+location_id);
+    $('[class^="divform"]').each(function(index,value){
+      var e = (this);
+//      alert('div_name='+$(e).attr('class'));
+	  if($(e).attr('class') == ('divform'+location_id)){
+		e.style.display = 'inline';
+	  } else {
+	    e.style.display = 'none';
+	  }
+    })  //class="divform{{sett_location_id}}"
+	//$('div').each(function (index, value) { 
+    // console.log('div' + index + ':' + $(this).attr('id')); 
+    //});
+	$('input[name=\'location_id\']').val(location_id);
+	getpartnerprice_list(1);
+}
+
+function validatePartner_compare_product() {
+	var curr_id = $('input[name=\'location_id\']').val();
+	if ((curr_id=='') || (curr_id=='0')) {
+		alert('Выбор Партнера закачки ОБЯЗАТЕЛЕН');
+		return false;
+	}
+	var tmpItemId = parseInt(curr_id);
+	if (tmpItemId <= 0) {
+		alert('Выбор Партнера закачки ОБЯЗАТЕЛЕН!');
+		return false;
+	}
+	
+	var tmp_int = $('.divform'+curr_id).find('.import_count').text();
+	if ((tmp_int=='') || !isNumber(tmp_int)) {
+		alert('<<Из прайса импортировано:>> должно быть положительным');
+		return false;
+	}
+	tmpItemId = parseInt(tmp_int);
+	if (tmpItemId <= 0) {
+		alert('<<Из прайса импортировано:>> должно быть положительным');
+		return false;
+    }
+
+	return true;
+}
+
+function partner_compare_product() {
+	if (validatePartner_compare_product()) {
+		$('#partner_compare_product').submit();
+	}
+}
+
+
+
+function validatePartner_set_extra() {
+	var curr_id = $('input[name=\'location_id\']').val();
+	if ((curr_id=='') || (curr_id=='0')) {
+		alert('Выбор Партнера закачки ОБЯЗАТЕЛЕН');
+		return false;
+	}
+	var tmpItemId = parseInt(curr_id);
+	if (tmpItemId <= 0) {
+		alert('Выбор Партнера закачки ОБЯЗАТЕЛЕН!');
+		return false;
+	}
+	
+	var tmp_int = $('.divform'+curr_id).find('.import_count').text();
+	if ((tmp_int=='') || !isNumber(tmp_int)) {
+		alert('<<Из прайса импортировано:>> должно быть положительным');
+		return false;
+	}
+	tmpItemId = parseInt(tmp_int);
+	if (tmpItemId <= 0) {
+		alert('<<Из прайса импортировано:>> должно быть положительным');
+		return false;
+    }
+
+	return true;
+}
+
+function partner_set_extra() {
+	if (validatePartner_set_extra()) {
+		$('#partner_set_extra').submit();
+	}
+}
+
+function deletedoubleprices(location_id){
+  var my_url = 'index.php?route=catalog/partnerprice/deletedoubleprices&user_token={{ user_token }}'+'&location_id='+location_id;
+//  var data = $(e).serialize();
+  var data = 'location_id='+location_id;
+$.ajax({
+				url: my_url,
+				type: 'post',
+				dataType: 'json',
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					// $('#button-upload').button('loading');
+				},
+				complete: function() {
+					// $('#button-upload').button('reset');
+				},
+				success: function(json) {
+					if (json['warning']) {
+						alert(json['warning']);
+						var html = '';
+                            html = html + '<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i>'+json['warning'];
+                            html = html + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+						//var e1 = $('div[class=\'alert-danger\']');
+						$('#message').html(html);
+					} else if(json['success']) {
+						var html = '';
+                            html = html + '<div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i>'+json['success'];
+                            html = html + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>';
+						$('#message').html(html);					
+					}
+				},
+
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+
+}
+
+</script>
+
+{{ footer }} 

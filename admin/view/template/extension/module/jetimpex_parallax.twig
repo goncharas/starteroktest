@@ -1,0 +1,502 @@
+{{ header }}
+{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-parallax" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary">
+					<i class="fa fa-save"></i>
+				</button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default">
+					<i class="fa fa-reply"></i>
+				</a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li>
+						<a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		{% if error_warning %}
+			<div class="alert alert-danger">
+				<i class="fa fa-exclamation-circle"></i>
+				{{ error_warning }}
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+			</div>
+		{% endif %}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<i class="fa fa-pencil"></i>
+					{{ text_edit }}
+				</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-parallax" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-name">{{ entry_name }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+							{% if error_name %}
+								<div class="text-danger">{{ error_name }}</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-image">{{ entry_image }}</label>
+						<div class="col-sm-10">
+							<a href="" id="thumb-image" data-toggle="image" class="img-thumbnail">
+								<img src="{% if image %}{{ image_thumb }}{% else %}{{ placeholder }}{% endif %}" alt="" title="" data-placeholder="{{ placeholder }}"/>
+							</a>
+							<input class="form-control" type="hidden" name="image" value="{{ image }}" id="input-image">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-width">{{ entry_width }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="width" value="{{ width }}" placeholder="{{ entry_width }}" id="input-width" class="form-control"/>
+							{% if error_width %}
+								<div class="text-danger">
+									{{ error_width }}
+								</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-height">{{ entry_height }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="height" value="{{ height }}" placeholder="{{ entry_height }}" id="input-height" class="form-control"/>
+							{% if error_height %}
+								<div class="text-danger">{{ error_height }}</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-blur">{{ entry_blur }}</label>
+						<div class="col-sm-10">
+							<select name="blur" id="input-blur" class="form-control">
+								{% if blur %}
+									<option value="1" selected="selected">{{ text_enabled }}</option>
+									<option value="0">{{ text_disabled }}</option>
+								{% else %}
+									<option value="1">{{ text_enabled }}</option>
+									<option value="0" selected="selected">{{ text_disabled }}</option>
+								{% endif %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-direction">{{ entry_direction }}</label>
+						<div class="col-sm-10">
+							<select name="direction" id="input-direction" class="form-control">
+								{% if direction %}
+									<option value="1" selected="selected">{{ text_normal }}</option>
+									<option value="0">{{ text_inverse }}</option>
+								{% else %}
+									<option value="1">{{ text_normal }}</option>
+									<option value="0" selected="selected">{{ text_inverse }}</option>
+								{% endif %}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-speed">{{ entry_speed }}</label>
+						<div class="col-sm-10">
+							<input type="text" name="speed" value="{{ speed }}" placeholder="{{ entry_speed }}" id="input-speed" class="form-control"/>
+							{% if error_speed %}
+								<div class="text-danger">{{ error_speed }}</div>
+							{% endif %}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+						<div class="col-sm-10">
+							<select name="status" id="input-status" class="form-control">
+								{% if status %}
+									<option value="1" selected="selected">{{ text_enabled }}</option>
+									<option value="0">{{ text_disabled }}</option>
+								{% else %}
+									<option value="1">{{ text_enabled }}</option>
+									<option value="0" selected="selected">{{ text_disabled }}</option>
+								{% endif %}
+							</select>
+						</div>
+					</div>
+					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+						{% if layers %}
+							{% for l, layer in layers %}
+								<div id="layer-{{ l }}" class="panel-group">
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="parallax_heading{{ l }}">
+											<h4 class="panel-title">
+												<a style="display: inline-block" class="well-s" role="button" data-toggle="collapse" data-parent="#accordion" href="#parallax_collapse{{ l }}" aria-expanded="true" aria-controls="parallax_collapse{{ l }}">
+													{{ entry_layer ~ " " ~ (l + 1) }}
+												</a>
+												<button type="button" data-toggle="tooltip" title="{{ text_remove_layer }}" class="btn btn-danger pull-right" onclick="removeLayer($(this));">
+													<i class="fa fa-minus-circle"></i>
+												</button>
+												<div class="clearfix"></div>
+											</h4>
+										</div>
+										<div id="parallax_collapse{{ l }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="parallax_heading{{ l }}">
+											<div class="panel-body">
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-type{{ l }}">{{ entry_type }}</label>
+													<div class="col-sm-10">
+														<select name="layers[{{ l }}][type]" id="input-type{{ l }}" class="form-control">
+															{% if layers[l].type %}
+																<option value="1" selected="selected">{{ text_media }}</option>
+																<option value="0">{{ text_html }}</option>
+															{% else %}
+																<option value="1">{{ text_media }}</option>
+																<option value="0" selected="selected">{{ text_html }}</option>
+															{% endif %}
+														</select>
+													</div>
+												</div>
+												<div class="tab-pane">
+													<div class="row">
+														<div class="col-sm-10 col-sm-offset-2">
+															<ul class="nav nav-tabs" id="language{{ l }}">
+																{% for language in languages %}
+																	<li>
+																		<a href="#language{{ l ~ language.language_id }}" data-toggle="tab">
+																			<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />
+																			{{ language.name }}
+																		</a>
+																	</li>
+																{% endfor %}
+															</ul>
+														</div>
+													</div>
+													<div class="tab-content">
+														{% for language in languages %}
+															<div class="tab-pane" id="language{{ l ~ language.language_id }}">
+																<div class="form-group">
+																	<label class="col-sm-2 control-label" for="input-description{{ l ~ language.language_id }}">{{ entry_description }}</label>
+																	<div class="col-sm-10">
+																		<textarea name="layers[{{ l }}][description][{{ language.language_id }}]" placeholder="{{ entry_description }}" id="input-description{{ l ~ language.language_id }}" class="form-control">{{ layers[l].description[language.language_id] ? layers[l].description[language.language_id] : "" }} </textarea>
+																	</div>
+																</div>
+															</div>
+														{% endfor %}
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-image{{ l }}">{{ entry_image }}</label>
+													<div class="col-sm-10">
+														<a href="" id="thumb-image{{ l }}" data-toggle="image" class="img-thumbnail">
+															<img src="{% if layers[l].image %}{{ layer_thumb.l }}{% else %}{{ placeholder }}{% endif %}" alt="" title="" data-placeholder="{{ placeholder }}"/>
+														</a>
+														<input class="form-control" type="hidden" name="layers[{{ l }}][image]" value="{{ layers[l].image ? layers[l].image : '' }}" id="input-image{{ l }}">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-width{{ l }}">{{ entry_width }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="layers[{{ l }}][width]" value="{{ layers[l].width }}" placeholder="{{ entry_width }}" id="input-width{{ l }}" class="form-control"/>
+														{% if error_layer_image_width[l] and error_layer_image_width[l] %}
+															<div class="text-danger">{{ error_layer_image_width[l] }}</div>
+														{% endif %}
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-height{{ l }}">{{ entry_height }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="layers[{{ l }}][height]" value="{{ layers[l].height }}" placeholder="{{ entry_height }}" id="input-height{{ l }}" class="form-control"/>
+														{% if error_layer_image_height[l] and error_layer_image_height[l] %}
+															<div class="text-danger">{{ error_layer_image_height[l] }}</div>
+														{% endif %}
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-speed{{ l }}">{{ entry_speed }}</label>
+													<div class="col-sm-10">
+														<input type="text" name="layers[{{ l }}][speed]" value="{{ layers[l].speed }}" placeholder="{{ entry_speed }}" id="input-speed{{ l }}" class="form-control"/>
+														{% if error_layer_speed[l] and error_layer_speed[l] %}
+															<div class="text-danger">{{ error_layer_speed[l] }}</div>
+														{% endif %}
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-fade{{ l }}">{{ entry_fade }}</label>
+													<div class="col-sm-10">
+														<select name="layers[{{ l }}][fade]" id="input-fade{{ l }}" class="form-control">
+															{% if layers[l].fade %}
+																<option value="1" selected="selected">{{ text_enabled }}</option>
+																<option value="0">{{ text_disabled }}</option>
+															{% else %}
+																<option value="1">{{ text_enabled }}</option>
+																<option value="0" selected="selected">{{ text_disabled }}</option>
+															{% endif %}
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-blur{{ l }}">{{ entry_blur }}</label>
+													<div class="col-sm-10">
+														<select name="layers[{{ l }}][blur]" id="input-blur{{ l }}" class="form-control">
+															{% if layers[l].blur %}
+																<option value="1" selected="selected">{{ text_enabled }}</option>
+																<option value="0">{{ text_disabled }}</option>
+															{% else %}
+																<option value="1">{{ text_enabled }}</option>
+																<option value="0" selected="selected">{{ text_disabled }}</option>
+															{% endif %}
+														</select>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-2 control-label" for="input-direction{{ l }}">{{ entry_direction }}</label>
+													<div class="col-sm-10">
+														<select name="layers[{{ l }}][direction]" id="input-direction{{ l }}" class="form-control">
+															{% if layers[l].direction %}
+																<option value="1" selected="selected">{{ text_normal }}</option>
+																<option value="0">{{ text_inverse }}</option>
+															{% else %}
+																<option value="1">{{ text_normal }}</option>
+																<option value="0" selected="selected">{{ text_inverse }}</option>
+															{% endif %}
+														</select>
+													</div>
+												</div>
+												<div id="modules-{{ l }}">
+													{% if layers[l].module_id and layers[l].module_id %}
+														{% for i in layers[l].module_id %}
+															<div id="module-{{ l ~ "-" ~ i }}">
+																<div class="form-group">
+																	<h4 class="col-sm-2 text-right">Module</h4>
+																	<div class="col-sm-10 text-right">
+																		<button type="button" onclick="removeModule($(this));" data-toggle="tooltip" title="{{ text_remove_module }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>
+																	</div>
+																	<div class="clearfix"></div>
+																</div>
+																<div class="form-group required">
+																	<label class="col-sm-2 control-label" for="input-module{{ l ~ i }}">{{ entry_module }}</label>
+																	<div class="col-sm-10">
+																		<select name="layers[{{ l }}][module_id][{{ i }}]" id="input-module{{ l ~ i }}" class="form-control">
+																			{% for module in modules %}
+																				{% if module.module_id == layers[l].module_id.i %}
+																					<option value="{{ module.module_id }}" selected="selected">{{ module.name }}</option>
+																				{% else %}
+																					<option value="{{ module.module_id }}">{{ module.name }}</option>
+																				{% endif %}
+																			{% endfor %}
+																		</select>
+																	</div>
+																</div>
+															</div>
+														{% endfor %}
+													{% endif %}
+												</div>
+												<div class="text-right">
+													<button type="button" onclick="addModule({{ l }});" data-toggle="tooltip" title="{{ text_add_module }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						{% endif %}
+					</div>
+					<div class="col-sm-12 text-right">
+						<button id="btn-add" type="button" onclick="addLayer($(this));" data-toggle="tooltip" title="{{ text_add_layer }}" class="btn btn-primary">
+							<i class="fa fa-plus-circle"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+<link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet" />
+<link href="view/javascript/codemirror/theme/monokai.css" rel="stylesheet" />
+<link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+<script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script> 
+<script type="text/javascript" src="view/javascript/codemirror/lib/xml.js"></script> 
+<script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script> 
+<script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+<script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+<script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+<script type="text/javascript">
+	var layers_count;
+	var modules_count;
+	function addLayer() {
+		if ($('#accordion').find('[id^="layer-"]').length) {
+			layers_count = $('#accordion').find('[id^="layer-"]:last').attr('id').split("-")[1];
+			layers_count++;
+		}
+		else {
+			layers_count = 0;
+		}
+		layerHtml = '<div id="layer-'+ layers_count +'" class="panel-group">';
+		layerHtml += '<div class="panel panel-default">';
+		layerHtml += '<div class="panel-heading" role="tab" id="parallax_heading' + layers_count + '">';
+		layerHtml += '	<h4 class="panel-title">';
+		layerHtml += '		<a style="display: inline-block" class="well-s" role="button" data-toggle="collapse" data-parent="#accordion" href="#parallax_collapse' + layers_count + '" aria-expanded="true" aria-controls="collapse' + layers_count + '">{{ entry_layer }} ' + (layers_count + 1) +'</a>';
+		layerHtml += '		<button type="button" data-toggle="tooltip" title="{{ text_remove_layer }}" class="btn btn-danger pull-right" onclick="removeLayer($(this));">';
+		layerHtml += '			<i class="fa fa-minus-circle"></i>';
+		layerHtml += '		</button>';
+		layerHtml += '		<div class="clearfix"></div>';
+		layerHtml += '	</h4>';
+		layerHtml += '</div>';
+		layerHtml += '<div id="parallax_collapse' + layers_count + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="parallax_heading' + layers_count + '">';
+		layerHtml += '<div class="panel-body">';
+		layerHtml += '<div class="form-group">';
+		layerHtml += 	'<label class="col-sm-2 control-label" for="input-type' + layers_count + '">{{ entry_type }}</label>';
+		layerHtml += 	'<div class="col-sm-10">';
+		layerHtml += 		'<select name="layers[' + layers_count + '][type]" id="input-type' + layers_count + '" class="form-control">';
+		layerHtml += 			'<option value="1">{{ text_media }}</option>';
+		layerHtml += 			'<option value="0" selected="selected">{{ text_html }}</option>';
+		layerHtml += 		'</select>';
+		layerHtml += 	'</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div class="tab-pane">';
+		layerHtml += '	<div class="row">';
+		layerHtml += '		<div class="col-sm-10 col-sm-offset-2">';
+		layerHtml += '			<ul class="nav nav-tabs" id="language' + layers_count + '">';
+		{% for language in languages %}
+		layerHtml += '					<li>';
+		layerHtml += '						<a href="#language' + layers_count + '{{ language['language_id'] }}" data-toggle="tab">';
+		layerHtml += '							<img src="language/{{ language['code'] }}/{{ language['code'] }}.png" title="{{ language['name'] }}" />';
+		layerHtml += '							{{ language['name'] }}';
+		layerHtml += '						</a>';
+		layerHtml += '					</li>';
+		{% endfor %}
+		layerHtml += '			</ul>';
+		layerHtml += '		</div>';
+		layerHtml += '	</div>';
+		layerHtml += '	<div class="tab-content">';
+		{% for language in languages %}
+		layerHtml += '			<div class="tab-pane" id="language' + layers_count + '{{ language['language_id'] }}">';
+		layerHtml += '				<div class="form-group">';
+		layerHtml += '					<label class="col-sm-2 control-label" for="input-description' + layers_count + '{{ language['language_id'] }}">{{ entry_description }}</label>';
+		layerHtml += '					<div class="col-sm-10">';
+		layerHtml += '						<textarea name="layers[' + layers_count + '][description][{{ language['language_id'] }}]" placeholder="{{ entry_description }}" id="input-description' + layers_count + '{{ language['language_id'] }}" class="form-control"></textarea>';
+		layerHtml += '					</div>';
+		layerHtml += '				</div>';
+		layerHtml += '			</div>';
+		{% endfor %}
+		layerHtml += '	</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div class="form-group">';
+		layerHtml += '	<label class="col-sm-2 control-label" for="input-image' + layers_count + '">{{ entry_image }}</label>';
+		layerHtml += '	<div class="col-sm-10">';
+		layerHtml += '		<a href="" id="thumb-image' + layers_count + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a>';
+		layerHtml += '		<input class="form-control" type="hidden" name="layers[' + layers_count + '][image]" value="" id="input-image' + layers_count + '">';
+		layerHtml += '	</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div class="form-group">';
+		layerHtml += '	<label class="col-sm-2 control-label" for="input-width' + layers_count + '">{{ entry_width }}</label>';
+		layerHtml += '	<div class="col-sm-10">';
+		layerHtml += '		<input type="text" name="layers[' + layers_count + '][width]" value="" placeholder="{{ entry_width }}" id="input-width' + layers_count + '" class="form-control"/>';
+		layerHtml += '	</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div class="form-group">';
+		layerHtml += '	<label class="col-sm-2 control-label" for="input-height' + layers_count + '">{{ entry_height }}</label>';
+		layerHtml += '	<div class="col-sm-10">';
+		layerHtml += '		<input type="text" name="layers[' + layers_count + '][height]" value="" placeholder="{{ entry_height }}" id="input-height' + layers_count + '" class="form-control"/>';
+		layerHtml += '	</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div class="form-group">';
+		layerHtml += '	<label class="col-sm-2 control-label" for="input-speed' + layers_count + '">{{ entry_speed }}</label>';
+		layerHtml += '	<div class="col-sm-10">';
+		layerHtml += '		<input type="text" name="layers[' + layers_count + '][speed]" value="" placeholder="{{ entry_speed }}" id="input-speed' + layers_count + '" class="form-control"/>';
+		layerHtml += '	</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div class="form-group">';
+		layerHtml += '	<label class="col-sm-2 control-label" for="input-fade' + layers_count + '">{{ entry_fade }}</label>';
+		layerHtml += '	<div class="col-sm-10">';
+		layerHtml += '		<select name="layers[' + layers_count + '][fade]" id="input-fade' + layers_count + '" class="form-control">';
+		layerHtml += '			<option value="1">{{ text_enabled }}</option>';
+		layerHtml += '			<option value="0" selected="selected">{{ text_disabled }}</option>';
+		layerHtml += '		</select>';
+		layerHtml += '	</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div class="form-group">';
+		layerHtml += '	<label class="col-sm-2 control-label" for="input-blur' + layers_count + '">{{ entry_blur }}</label>';
+		layerHtml += '	<div class="col-sm-10">';
+		layerHtml += '		<select name="layers[' + layers_count + '][blur]" id="input-blur' + layers_count + '" class="form-control">';
+		layerHtml += '			<option value="1">{{ text_enabled }}</option>';
+		layerHtml += '			<option value="0" selected="selected">{{ text_disabled }}</option>';
+		layerHtml += '		</select>';
+		layerHtml += '	</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div class="form-group">';
+		layerHtml += '	<label class="col-sm-2 control-label" for="input-direction' + layers_count + '">{{ entry_direction }}</label>';
+		layerHtml += '	<div class="col-sm-10">';
+		layerHtml += '		<select name="layers[' + layers_count + '][direction]" id="input-direction' + layers_count + '" class="form-control">';
+		layerHtml += '			<option value="1">{{ text_normal }}</option>';
+		layerHtml += '			<option value="0" selected="selected">{{ text_inverse }}</option>';
+		layerHtml += '		</select>';
+		layerHtml += '	</div>';
+		layerHtml += '</div>';
+		layerHtml += '<div id="modules-' + layers_count + '">';
+		layerHtml += '	</div>';
+		layerHtml += '<div class="col-sm-12 text-right">';
+		layerHtml += '	<button type="button" onclick="addModule(' + layers_count + ');" data-toggle="tooltip" title="{{ text_add_module }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>';
+		layerHtml += '</div>';
+		layerHtml += '</div>';
+		layerHtml += '</div>';
+		layerHtml += '</div>';
+		$('#accordion').append(layerHtml);
+	}
+	function addModule(layer) {
+		if ($('[id^="modules-'+ layer +'"]').find('[id^="module-"]').length) {
+			modules_count = $('[id^="modules-'+ layer +'"]').find('[id^="module-"]:last').attr('id').split("-")[2];
+			modules_count++;
+		}
+		else {
+			modules_count = 0;
+		}
+		moduleHtml = '<div id="module-' + layer + '-' + modules_count + '">';
+		moduleHtml += '	<div class="form-group">';
+		moduleHtml += '<h4 class="col-sm-2 text-right">Module</h4>';
+		moduleHtml += '		<div class="col-sm-10 text-right">';
+		moduleHtml += '			<button type="button" onclick="removeModule($(this));" data-toggle="tooltip" title="{{ text_remove_module }}" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button>';
+		moduleHtml += '		</div>';
+		moduleHtml += '		<div class="clearfix"></div>';
+		moduleHtml += '	</div>';
+		moduleHtml += '	<div class="form-group required">';
+		moduleHtml += '		<label class="col-sm-2 control-label" for="input-module' + layer + modules_count + '">{{ entry_module }}</label>';
+		moduleHtml += '		<div class="col-sm-10">';
+		moduleHtml += '			<select name="layers[' + layer + '][module_id][' + modules_count + ']" id="input-module' + layer + modules_count + '" class="form-control">';
+		{% for module in modules %}
+		moduleHtml+= '					<option value="{{ module['module_id'] }}">{{ module['name'] }}</option>';
+		{% endfor %}
+		moduleHtml+= '			</select>';
+		moduleHtml+= '		</div>';
+		moduleHtml+= '	</div>';
+		moduleHtml+= '</div>';
+		$('#modules-' + layer + '').append(moduleHtml);
+	}
+	function removeLayer(e) {
+		e.closest('[id*="layer-"]').remove();
+	}
+	function removeModule(e) {
+		e.closest('[id*="module-"]').remove();
+	}
+	;(function ($) {
+		$(document).ready(UpdateDescription);
+		$('#btn-add').on('click', UpdateDescription);
+		function UpdateDescription() {
+			if (!$('#accordion').find('.nav').hasClass('active')) {
+				$('#accordion').find('.nav').find('a:first').tab('show');
+			}
+			if (!$('#accordion').find('.nav').hasClass('active')) {
+				$('#accordion').find('.nav').find('a:first').tab('show');
+			}
+			$('#accordion').find('.tab-content').find('[id^="input-description"]').each(function(){
+				if (!$(this).attr('style')) {
+					$(this).summernote({height: 300});
+				}
+			});
+		}
+	})(jQuery);
+</script></div>
+{{ footer }}

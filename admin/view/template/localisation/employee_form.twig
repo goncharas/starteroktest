@@ -1,0 +1,224 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-employee" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_form }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-employee" class="form-horizontal">
+
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab-general" data-toggle="tab">{{ entry_main_tab }}</a></li>
+	    {% for rec in reference_employee_contact %}
+                <li><a href="#tab-{{ rec }}" data-toggle="tab">{{ entry_prefix_tab }}[{{ rec }}]</a></li>
+	    {% endfor %}
+	  </ul>
+           <div class="tab-content">
+            <div class="tab-pane active" id="tab-general">
+             <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-department_id">{{ entry_department_id }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="path" value="{{ path }}" placeholder="{{ entry_department_id }}" id="input-department_id" class="form-control" />
+                  <input type="hidden" name="department_id" value="{{ department_id }}" />
+                  {% if error_parent_id %}
+                  <div class="text-danger">{{ error_parent_id }}</div>
+                  {% endif %}
+                </div>
+              </div>
+	  
+
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-nickname">{{ entry_nickname }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="nickname" value="{{ nickname }}" placeholder="{{ entry_nickname }}" id="input-nickname" class="form-control" />
+                  {% if error_nickname %}
+                  <div class="text-danger">{{ error_nickname }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-image">{{ entry_image }}</label>
+                <div class="col-sm-10"><a href="" id="thumb-image" data-toggle="image" class="img-thumbnail"><img src="{{ thumb }}" alt="" title="{{ entry_nickname }}" data-placeholder="{{ placeholder }}" /></a>
+                  <input type="hidden" name="image" value="{{ image }}" id="input-image" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-skype">{{ entry_skype }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="skype" value="{{ skype }}" placeholder="{{ entry_skype }}" id="input-skype" class="form-control" />
+                  {% if error_skype %}
+                  <div class="text-danger">{{ error_skype }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-email">{{ entry_email }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
+                   {% if error_email %}
+                  <div class="text-danger">{{ error_email }}</div>
+                  {% endif %}
+               </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-order">{{ entry_order }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="order" value="{{ order }}" placeholder="{{ entry_order }}" id="input-order" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-status">{{ entry_status }}</label>
+                <div class="col-sm-10">
+                  <select name="status" id="input-status" class="form-control">
+                    {% if status %}
+                    <option value="1" selected="selected">{{ text_enabled }}</option>
+                    <option value="0">{{ text_disabled }}</option>
+                    {% else %}
+                    <option value="1">{{ text_enabled }}</option>
+                    <option value="0" selected="selected">{{ text_disabled }}</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+
+              <ul class="nav nav-tabs" id="language">
+                {% for language in languages %}
+                <li><a href="#language{{ language.language_id }}" data-toggle="tab"><img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" /> {{ language.name }}</a></li>
+                {% endfor %}
+              </ul>
+              <div class="tab-content">
+	        {% set first = 1 %}
+                {% for language in languages %}
+                <div class="tab-pane {% if first %} active{% set first = 0 %}{% endif %}" id="language{{ language.language_id }}">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-employee_details{{ language.language_id }}">{{ entry_details_name }}</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="employee_details[{{ language.language_id }}][name]" value="{{ employee_details[language.language_id] ? employee_details[language.language_id].name }}" placeholder="{{ entry_details_name }}" id="input-employee_details{{ language.language_id }}" class="form-control" />
+                  {% if error_details_name[language.language_id] %}
+                  <div class="text-danger">{{ error_details_name[language.language_id] }}</div>
+                  {% endif %}
+                   </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label" for="input-employee_contact{{ language.language_id }}">{{ entry_details_position }}</label>
+                    <div class="col-sm-10">
+                      <input type="text" name="employee_details[{{ language.language_id }}][position]" value="{{ employee_details[language.language_id] ? employee_details[language.language_id].position }}" placeholder="{{ entry_details_position }}" id="input-employee_details{{ language.language_id }}" class="form-control" />
+                  {% if error_details_position[language.language_id] %}
+                  <div class="text-danger">{{ error_details_position[language.language_id] }}</div>
+                  {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+	    
+	    </div>
+	   
+ 	    {% for rec in reference_employee_contact %}
+	    <div class="tab-pane" id="tab-{{ rec }}">
+              <div class="form-group required">
+                <label class="col-sm-2 control-label" for="input-telephone{{ rec }}"><span data-toggle="tooltip" title="{{ help_contact_telephone }}">{{ entry_contact_telephone }}</span></label>
+                <div class="col-sm-10">
+                  <input type="text" name="employee_contact[{{ rec }}][telephone]" value="{{ employee_contact[rec].telephone }}" placeholder="{{ entry_contact_telephone }}" id="input-contact_telephone{{ rec }}" class="form-control" />
+                  {% if error_contact_telephone[rec] %}
+                  <div class="text-danger">{{ error_contact_telephone[rec] }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-viber{{ rec }}">{{ entry_contact_viber }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="employee_contact[{{ rec }}][viber]" value="{{ employee_contact[rec].viber }}" placeholder="{{ entry_contact_viber }}" id="input-contact_viber{{ rec }}" class="form-control" />
+                  {% if error_contact_viber[rec] %}
+                  <div class="text-danger">{{ error_contact_viber[rec] }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-telegram{{ rec }}">{{ entry_contact_telegram }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="employee_contact[{{ rec }}][telegram]" value="{{ employee_contact[rec].telegram }}" placeholder="{{ entry_contact_telegram }}" id="input-contact_telegram{{ rec }}" class="form-control" />
+                  {% if error_contact_telegram[rec] %}
+                  <div class="text-danger">{{ error_contact_telegram[rec] }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-whatsapp{{ rec }}">{{ entry_contact_whatsapp }}</label>
+                <div class="col-sm-10">
+                  <input type="text" name="employee_contact[{{ rec }}][whatsapp]" value="{{ employee_contact[rec].whatsapp }}" placeholder="{{ entry_contact_whatsapp }}" id="input-contact_whatsapp{{ rec }}" class="form-control" />
+                  {% if error_contact_whatsapp[rec] %}
+                  <div class="text-danger">{{ error_contact_whatsapp[rec] }}</div>
+                  {% endif %}
+                </div>
+              </div>
+	         
+	    </div>
+	    {% endfor %}
+	   </div>
+	    
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <link href="view/javascript/codemirror/lib/codemirror.css" rel="stylesheet" />
+  <link href="view/javascript/codemirror/theme/monokai.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/codemirror/lib/codemirror.js"></script> 
+  <script type="text/javascript" src="view/javascript/codemirror/lib/xml.js"></script> 
+  <script type="text/javascript" src="view/javascript/codemirror/lib/formatting.js"></script> 
+  
+  <script type="text/javascript" src="view/javascript/summernote/summernote.js"></script>
+  <link href="view/javascript/summernote/summernote.css" rel="stylesheet" />
+  <script type="text/javascript" src="view/javascript/summernote/summernote-image-attributes.js"></script>
+  <script type="text/javascript" src="view/javascript/summernote/opencart.js"></script>
+  
+  <script type="text/javascript"><!--
+$('input[name=\'path\']').autocomplete({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=localisation/employee/autocomplete&user_token={{ user_token }}&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				json.unshift({
+					category_id: 0,
+					name: '{{ text_none }}'
+				});
+
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['department_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'path\']').val(item['label']);
+		$('input[name=\'department_id\']').val(item['value']);
+	}
+});
+//--></script>
+  
+</div>
+{{ footer }}

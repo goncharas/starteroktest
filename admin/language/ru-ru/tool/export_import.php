@@ -1,0 +1,201 @@
+<?php
+// Heading
+$_['heading_title']                         = 'Экспорт / Импорт';
+
+// Text
+$_['text_success']                          = 'Успех: вы успешно импортировали данные!';
+$_['text_success_settings']                 = 'Успех: вы успешно обновили настройки инструмента Экспорт / импорт!';
+$_['text_export_type_category']             = 'Категорий (включая категории и фильтры)';
+$_['text_export_type_category_old']         = 'Категорий';
+$_['text_export_type_product']              = 'Продукты (включая данные о продуктах, опции, специальные предложения, скидки, вознаграждения, атрибуты и фильтры)';
+$_['text_export_type_product_old']          = 'Продукты (включая данные о продуктах, опции, специальные предложения, скидки, вознаграждения и атрибуты)';
+$_['text_export_type_option']               = 'Определения параметров';
+$_['text_export_type_attribute']            = 'Определение атрибута';
+$_['text_export_type_filter']               = 'Определение фильтра';
+$_['text_export_type_customer']             = 'Клиенты';
+$_['text_yes']                              = 'Да';
+$_['text_no']                               = 'Нет';
+$_['text_nochange']                         = 'Данные сервера не были изменены.';
+$_['text_log_details']                      = 'См. также \' System & gt; Error Logs\' для получения дополнительной информации.';
+$_['text_log_details_2_0_x']                = 'См. также \' Tools &gt; Error Logs\' для получения дополнительной информации.';
+$_['text_log_details_2_1_x']                = 'См. также\'System &gt; Tools & gt; Error Logs \' для получения дополнительной информации.';
+$_['text_loading_notifications']            = 'Получение Сообщений';
+$_['text_retry']                            = 'повторная попытка';
+
+// Entry
+$_['entry_import']                          = 'Импорт из файла электронной таблицы XLS, XLSX или ODS';
+$_['entry_export']                          = 'Экспорт запрошенных данных в файл электронной таблицы XLSX.';
+$_['entry_export_type']                     = 'Выберите данные для экспорта:';
+$_['entry_range_type']                      = 'Пожалуйста, выберите диапазон данных, который вы хотите экспортировать:';
+$_['entry_start_id']                        = 'Start id:';
+$_['entry_start_index']                     = 'Отсчеты в серию:';
+$_['entry_end_id']                          = 'End id:';
+$_['entry_end_index']                       = 'Номер партии:';
+$_['entry_incremental']                     = 'Использовать добавочный Импорт';
+$_['entry_upload']                          = 'Файл для загрузки';
+$_['entry_settings_use_option_id']          = 'Используйте <em>option_id на сайте</em> вместо <em>option name</em> в листах \' ProductOptions\' и \'ProductOptionValues\'';
+$_['entry_settings_use_option_value_id']    = 'Используйте <em>option_value_id</em> вместо <em>option_value name</em> в листах \'ProductOptionValues\'';
+$_['entry_settings_use_attribute_group_id'] = 'Используйте <em>attribute_group_id</em> вместо <em>attribute_group name</em> в листах \'ProductAttributes\'';
+$_['entry_settings_use_attribute_id']       = 'Используйте <em>attribute_id</em> вместо <em>attribute name</em> в листах \'ProductAttributes\'';
+$_['entry_settings_use_filter_group_id']    = 'Используйте <em>filter_group_id</em> вместо <em>filter_group name</em> в листах  \'ProductFilters\' и \'CategoryFilters\'';
+$_['entry_settings_use_filter_id']          = 'Используйте <em>filter_id</em> вместо <em>filter name</em> в листах \'ProductFilters\' и \'CategoryFilters\'';
+$_['entry_settings_use_export_cache']       = 'Используйте phpTemp cache для крупного экспорта (будет немного медленнее)';
+$_['entry_settings_use_import_cache']       = 'Используйте phpTemp cache для крупного импорта (будет немного медленнее)';
+
+// Error
+$_['error_permission']                      = 'Внимание: у вас нет разрешения на изменение экспорта / импорта!';
+$_['error_upload']                          = 'Загруженный файл электронной таблицы содержит ошибки проверки!';
+$_['error_categories_header']               = 'Экспорт / импорт: недопустимый Заголовок на листе категорий';
+$_['error_category_filters_header']         = 'Экспорт / импорт: недопустимый Заголовок на листе CategoryFilters';
+$_['error_products_header']                 = 'Экспорт / импорт: недопустимый Заголовок на листе Products';
+$_['error_additional_images_header']        = 'Экспорт / импорт: недопустимый Заголовок на листе AdditionalImages';
+$_['error_specials_header']                 = 'Экспорт / импорт: недопустимый Заголовок на листе специальных предложений';
+$_['error_discounts_header']                = 'Экспорт / импорт: недопустимый Заголовок в листе скидок';
+$_['error_rewards_header']                  = 'Экспорт / импорт: недопустимый Заголовок на листе вознаграждений';
+$_['error_product_options_header']          = 'Экспорт / импорт: недопустимый Заголовок на листе ProductOptions';
+$_['error_product_option_values_header']    = 'Экспорт / импорт: недопустимый Заголовок на листе ProductOptionValues';
+$_['error_product_attributes_header']       = 'Экспорт / импорт: недопустимый Заголовок на листе ProductAttributes';
+$_['error_product_filters_header']          = 'Экспорт / импорт: недопустимый Заголовок на листе ProductFilters';
+$_['error_options_header']                  = 'Экспорт / импорт: недопустимый Заголовок на листе параметров';
+$_['error_option_values_header']            = 'Экспорт / импорт: недопустимый Заголовок на листе OptionValues';
+$_['error_attribute_groups_header']         = 'Экспорт / импорт: недопустимый Заголовок на листе AttributeGroups';
+$_['error_attributes_header']               = 'Экспорт / импорт: недопустимый Заголовок на листе атрибутов';
+$_['error_filter_groups_header']            = 'Экспорт / импорт: недопустимый Заголовок на листе FilterGroups';
+$_['error_filters_header']                  = 'Экспорт / импорт: недопустимый Заголовок на листе фильтры';
+$_['error_customers_header']                = 'Экспорт / импорт: недопустимый Заголовок на листе Customers';
+$_['error_addresses_header']                = 'Экспорт / импорт: недопустимый Заголовок на листе адресов';
+$_['error_product_options']                 = 'Экспорт / импорт: отсутствует лист продуктов или лист продуктов, не перечисленных перед ProductOptions';
+$_['error_product_option_values']           = 'Экспорт / импорт: отсутствует лист продуктов или лист продуктов, не перечисленных перед ProductOptionValues';
+$_['error_product_option_values_2']         = 'Экспорт/импорт: отсутствует ProductOptions листа, или ProductOptions листе не перечислены до ProductOptionValues';
+$_['error_product_option_values_3']         = 'Экспорт / импорт: лист ProductOptionValues также ожидается после листа ProductOptions';
+$_['error_additional_images']               = 'Экспорт / импорт: отсутствует лист продуктов или лист продуктов, не перечисленных перед AdditionalImages';
+$_['error_specials']                        = 'Экспорт / импорт: отсутствует лист продуктов или лист продуктов, не перечисленных перед специальными предложениями';
+$_['error_discounts']                       = 'Экспорт / импорт: отсутствующий лист продуктов или лист продуктов, не указанный перед скидками';
+$_['error_rewards']                         = 'Экспорт / импорт: отсутствует лист продуктов или лист продуктов, не перечисленных перед наградами';
+$_['error_product_attributes']              = 'Экспорт / импорт: отсутствует лист продуктов или лист продуктов, не перечисленных перед ProductAttributes';
+$_['error_attributes']                      = 'Экспорт / импорт: отсутствует лист AttributeGroups или лист AttributeGroups, не указанный перед атрибутами';
+$_['error_attributes_2']                    = 'Экспорт / импорт: лист атрибутов также ожидается после листа AttributeGroups';
+$_['error_category_filters']                = 'Экспорт/импорт: отсутствует лист категорий, или категорий листе не перечислены до CategoryFilters';
+$_['error_product_filters']                 = 'Экспорт / импорт: отсутствует лист продуктов или лист продуктов, не перечисленных перед ProductFilters';
+$_['error_filters']                         = 'Экспорт / импорт: отсутствует лист FilterGroups или лист FilterGroups, не указанный перед фильтрами';
+$_['error_filters_2']                       = 'Экспорт / импорт: лист фильтров также ожидается после листа FilterGroups';
+$_['error_option_values']                   = 'Экспорт / импорт: отсутствует лист параметров или лист параметров, не указанный перед OptionValues';
+$_['error_option_values_2']                 = 'Экспорт / импорт: лист OptionValues также ожидается после листа Options';
+$_['error_post_max_size']                   = 'Размер файла больше чем %1 (see PHP setting \'post_max_size\')';
+$_['error_upload_max_filesize']             = 'Размер файла больше чем %1 (see PHP setting \'upload_max_filesize\')';
+$_['error_select_file']                     = 'Пожалуйста, выберите файл перед нажатием \'Импорт\'';
+$_['error_id_no_data']                      = 'Нет данных между start-id и end-id.';
+$_['error_page_no_data']                    = 'Больше никаких данных.';
+$_['error_param_not_number']                = 'Значения для диапазона данных должны быть целыми числами.';
+$_['error_upload_name']                     = 'Отсутствует Имя файла для загрузки';
+$_['error_upload_ext']                      = 'Загруженный файл не имеет \'.xls\', \'.xlsx\' или \'.ods\' расширения имен файлов, это может быть не файл электронной таблицы!';
+$_['error_notifications']                   = 'Не удалось загрузить сообщения из MHCCORP.COM.';
+$_['error_no_news']                         = 'Нет сообщений';
+$_['error_batch_number']                    = 'Номер партии должен быть больше 0';
+$_['error_min_item_id']                     = 'Start id должен быть больше 0';
+$_['error_option_name']                     = 'Ключ.поле \'%1\' определяется несколько раз!<br />';
+$_['error_option_name']                    .= 'На вкладке настройки активируйте следующее:<br />';
+$_['error_option_name']                    .= "Используйте <em>option_id</em> вместо <em>option name</em> на листе 'ProductOptions' и 'ProductOptionValues'";
+$_['error_option_value_name']               = 'значение параметра \'%1\' определяется несколько раз в этом списке!<br />';
+$_['error_option_value_name']              .= 'На вкладке настройки активируйте следующее:<br />';
+$_['error_option_value_name']              .= "Используйте <em>option_value_id</em> вместо <em>option_value name</em> в листах 'ProductOptionValues'";
+$_['error_attribute_group_name']            = 'AttributeGroup \'%1\' определяется несколько раз!<br />';
+$_['error_attribute_group_name']           .= 'На вкладке настройки активируйте следующее:<br />';
+$_['error_attribute_group_name']           .= "Используйте <em>attribute_group_id</em> вместо <em>attribute_group name</em> в листах 'ProductAttributes'";
+$_['error_attribute_name']                  = 'Аттрибут \'%1\' определяется несколько раз в пределах своей группы атрибутов!<br />';
+$_['error_attribute_name']                 .= 'На вкладке настройки активируйте следующее:<br />';
+$_['error_attribute_name']                 .= "Используйте <em>attribute_id</em> вместо <em>attribute name</em> в листах 'ProductAttributes'";
+$_['error_filter_group_name']               = 'FilterGroup \'%1\' определяется несколько раз!<br />';
+$_['error_filter_group_name']              .= 'На вкладке настройки активируйте следующее:<br />';
+$_['error_filter_group_name']              .= "Используйте <em>filter_group_id</em> вместо <em>filter_group name</em> в листах 'ProductFilters'";
+$_['error_filter_name']                     = 'Filter \'%1\' определяется несколько раз в разрезе filter group!<br />';
+$_['error_filter_name']                    .= 'На вкладке настройки активируйте следующее:<br />';
+$_['error_filter_name']                    .= "Используйте <em>filter_id</em> вместо <em>filter name</em> в листах 'ProductFilters'";
+
+$_['error_missing_customer_group']                      = 'Экспорт/Импорт: Ошибка customer_groups в листах \'%1\'!';
+$_['error_invalid_customer_group']                      = 'Экспорт/Импорт: Не определено customer_group \'%2\' ошибка в листах \'%1\'!';
+$_['error_missing_product_id']                          = 'Экспорт/Импорт: Ошибка product_ids в листах \'%1\'!';
+$_['error_missing_option_id']                           = 'Экспорт/Импорт: Ошибка option_ids в листах \'%1\'!';
+$_['error_invalid_option_id']                           = 'Экспорт/Импорт: Не определено option_id \'%2\' использована в листах \'%1\'!';
+$_['error_missing_option_name']                         = 'Экспорт/Импорт: Ошибка option_names в листах \'%1\'!';
+$_['error_invalid_product_id_option_id']                = 'Экспорт/Импорт: Option_id \'%3\' не указано для product_id \'%2\' в листах \'%4\', но это использовано в листах \'%1\'!';
+$_['error_missing_option_value_id']                     = 'Экспорт/Импорт: Ошибка option_value_ids в листах \'%1\'!';
+$_['error_invalid_option_id_option_value_id']           = 'Экспорт/Импорт: Не определено option_value_id \'%3\' для option_id \'%2\' использованной в листах \'%1\'!';
+$_['error_missing_option_value_name']                   = 'Экспорт/Импорт: Ошибка option_value_names в листах \'%1\'!';
+$_['error_invalid_option_id_option_value_name']         = 'Экспорт/Импорт: Не определено option_value_name \'%3\' для optiion_id \'%2\' использованной в листах \'%1\'!'; 
+$_['error_invalid_option_name']                         = 'Экспорт/Импорт: Не определено option_name \'%2\' использованной в листах \'%1\'!';
+$_['error_invalid_product_id_option_name']              = 'Экспорт/Импорт: Option_name \'%3\' не указано для product_id \'%2\' в листах \'%4\', но это использовано в листах \'%1\'!';
+$_['error_invalid_option_name_option_value_id']         = 'Экспорт/Импорт: Не определено option_value_id \'%3\' для option_name \'%2\' использованной в листах \'%1\'!';
+$_['error_invalid_option_name_option_value_name']       = 'Экспорт/Импорт: Не определено option_value_name \'%3\' для option_name \'%2\' использованной в листах \'%1\'!';
+$_['error_missing_attribute_group_id']                  = 'Экспорт/Импорт: Ошибка attribute_group_ids в листах \'%1\'!';
+$_['error_invalid_attribute_group_id']                  = 'Экспорт/Импорт: Не определено attribute_group_id \'%2\' использованной в листах \'%1\'!';
+$_['error_missing_attribute_group_name']                = 'Экспорт/Импорт: Ошибка attribute_group_names в листах \'%1\'!';
+$_['error_missing_attribute_id']                        = 'Экспорт/Импорт: Ошибка attribute_ids в листах \'%1\'!';
+$_['error_invalid_attribute_group_id_attribute_id']     = 'Экспорт/Импорт: Не определено attribute_id \'%3\' для attribute_group_id \'%2\' использованной в листах \'%1\'!';
+$_['error_missing_attribute_name']                      = 'Экспорт/Импорт: Ошибка attribute_names в листах \'%1\'!';
+$_['error_invalid_attribute_group_id_attribute_name']   = 'Экспорт/Импорт: Не определено attribute_name \'%3\' для optiion_id \'%2\' использованной в листах \'%1\'!'; 
+$_['error_invalid_attribute_group_name']                = 'Экспорт/Импорт: Не определено attribute_group_name \'%2\' использованной в листах \'%1\'!';
+$_['error_invalid_attribute_group_name_attribute_id']   = 'Экспорт/Импорт: Не определено attribute_id \'%3\' для attribute_group_name \'%2\' использованной в листах \'%1\'!';
+$_['error_invalid_attribute_group_name_attribute_name'] = 'Экспорт/Импорт: Не определено attribute_name \'%3\' для attribute_group_name \'%2\' использованной в листах \'%1\'!';
+$_['error_missing_filter_group_id']                     = 'Экспорт/Импорт: Ошибка filter_group_ids в листах \'%1\'!';
+$_['error_invalid_filter_group_id']                     = 'Экспорт/Импорт: Не определено filter_group_id \'%2\' использованной в листах \'%1\'!';
+$_['error_missing_filter_group_name']                   = 'Экспорт/Импорт: Ошибка filter_group_names в листах \'%1\'!';
+$_['error_missing_filter_id']                           = 'Экспорт/Импорт: Ошибка filter_ids в листах \'%1\'!';
+$_['error_invalid_filter_group_id_filter_id']           = 'Экспорт/Импорт: Не определено filter_id \'%3\' для filter_group_id \'%2\' использованной в листах \'%1\'!';
+$_['error_missing_filter_name']                         = 'Экспорт/Импорт: Ошибка filter_names в листах \'%1\'!';
+$_['error_invalid_filter_group_id_filter_name']         = 'Экспорт/Импорт: Не определено filter_name \'%3\' для optiion_id \'%2\' использованной в листах \'%1\'!'; 
+$_['error_invalid_filter_group_name']                   = 'Экспорт/Импорт: Не определено filter_group_name \'%2\' использованной в листах \'%1\'!';
+$_['error_invalid_filter_group_name_filter_id']         = 'Экспорт/Импорт: Не определено filter_id \'%3\' для filter_group_name \'%2\' использованной в листах \'%1\'!';
+$_['error_invalid_filter_group_name_filter_name']       = 'Экспорт/Импорт: Не определено filter_name \'%3\' для filter_group_name \'%2\' использованной в листах \'%1\'!';
+$_['error_invalid_product_id']                          = 'Экспорт/Импорт: ошибочный product_id \'%2\' использованной в листах \'%1\'!';
+$_['error_duplicate_product_id']                        = 'Экспорт/Импорт: дубликат product_id \'%2\' использованной в листах \'%1\'!';
+$_['error_duplicate_model']                             = 'Экспорт/Импорт: дубликат Модели <<%2>> использованной в листах \'%1\'!';
+$_['error_unlisted_product_id']                         = 'Экспорт/Импорт: Лист \'%1\' не может использовать product_id \'%2\' потому что его нет в списке в листах \'Products\'!';
+$_['error_wrong_order_product_id']                      = 'Экспорт/Импорт: Лист \'%1\' использует product_id \'%2\' в неправильном порядке. Ожидаемый порядок == возрастание!';
+$_['error_filter_not_supported']                        = 'Экспорт/Импорт: Фильтры не поддерживаются в вашей версии OpenCart!';
+$_['error_missing_category_id']                         = 'Экспорт/Импорт: Ошибка category_ids в листах \'%1\'!';
+$_['error_invalid_category_id']                         = 'Экспорт/Импорт: Не действительное category_id \'%2\' использована в листах \'%1\'!';
+$_['error_duplicate_category_id']                       = 'Экспорт/Импорт: Дубликат category_id \'%2\' использован в листах \'%1\'!';
+$_['error_wrong_order_category_id']                     = 'Экспорт/Импорт: лист \'%1\' использует category_id \'%2\' в неверном порядке. Ожидаемый порядок == возрастание!';
+$_['error_unlisted_category_id']                        = 'Экспорт/Импорт: лист \'%1\' не может Использовать category_id \'%2\' потому что его нет в списке в листах \'Categories\'!';
+$_['error_addresses']                                   = 'Экспорт/Импорт: Ошибка Cutomers лист, или Customers лист нет в списке перед Addresses!';
+$_['error_addresses_2']                                 = 'Экспорт/Импорт: Addresses лист также определен после Customers листа';
+$_['error_invalid_store_id']                            = 'Экспорт/Импорт: Не действительное store_id=\'%1\' использован в листах \'%2\'!';
+$_['error_missing_customer_id']                         = 'Экспорт/Импорт: Ошибка customer_ids в листах \'%1\'!';
+$_['error_invalid_customer_id']                         = 'Экспорт/Импорт: Не действительное customer_id \'%2\' использован в листах \'%1\'!';
+$_['error_duplicate_customer_id']                       = 'Экспорт/Импорт: Дубликат customer_id \'%2\' использован в листах \'%1\'!';
+$_['error_wrong_order_customer_id']                     = 'Экспорт/Импорт: Лист \'%1\' uses customer_id \'%2\' в неверном порядке. Ожидаемый порядок == возрастание!';
+$_['error_unlisted_customer_id']                        = 'Экспорт/Импорт: Лист \'%1\' не может Использовать customer_id \'%2\' потому что его нет в списке в листах \'Customers\'!';
+$_['error_missing_country_col']                         = 'Экспорт/Импорт: Лист \'%1\' не имеет \'country\' в заголовке колонок!';
+$_['error_missing_zone_col']                            = 'Экспорт/Импорт: Лист \'%1\' не имеет \'zone\' в заголовке колонок!';
+$_['error_multiple_country']                           = 'Экспорт/Импорт: Не определено country \'%1\' использован в листах \'%2\'!';
+$_['error_multiple_zone']                              = 'Экспорт/Импорт: Не определено zone \'%2\' for country \'%1\' использован в листах \'%3\'!';
+$_['error_incremental_only']                            = 'Экспорт/Импорт: Лист \'%1\' пока можно импортировать только в инкрементном режиме!';
+
+$_['error_empty_currency_code']                         = 'Поле Партнер ОБЯЗАТЕЛЬНО для импорта ';
+$_['error_empty_location_id']                           = 'Поле LOCATION_ID ОБЯЗАТЕЛЬНА для импорта ';
+
+$_['error_duplicate_model_csv']                         = 'Экспорт/Импорт: дубликат Модели <<%2>> использованной в строке \'%1\'!';
+$_['error_upload_ext_csv']                              = 'Загруженный файл не имеет \'.csv\' расширения имен файлов, это может быть не файл таблицы!';
+
+
+// Tabs
+$_['tab_import']                            = 'Импорт';
+$_['tab_export']                            = 'Экспорт';
+$_['tab_settings']                          = 'Настройки';
+
+// Button labels
+$_['button_import']                         = 'Импорт';
+$_['button_export']                         = 'Экспорт';
+$_['button_settings']                       = 'Изменение настроек';
+$_['button_export_id']                      = 'По диапазону id';
+$_['button_export_page']                    = 'По партиям';
+
+// Help
+$_['help_range_type']                       = '(Необязательно, оставьте пустым, если не требуется)';
+$_['help_incremental_yes']                  = '(Обновление и/или добавление данных)';
+$_['help_incremental_no']                   = '(Удалить все старые данные перед импортом)';
+$_['help_import']                           = 'Электронная Таблица может иметь категории, продукты, определения атрибутов, определения параметров или определения фильтров. ';
+$_['help_import_old']                       = 'Таблицы могут иметь категорий, продуктов, определения атрибутов или определений. ';
+$_['help_format']                           = 'Сначала выполните экспорт, чтобы увидеть точный Формат листов!';
+?>

@@ -1,0 +1,74 @@
+<div class="box category">
+	
+	<div class="box-content">
+		<div class="box-category"> 
+			<ul class="list-unstyled category_menu"> 
+				{% for category in categories %} 
+				{% if (category['children']) %} 
+				<li class="parent">				
+					<a href="{{ category['href'] }}">{{ category['name'] }}</a>					
+					<ul class="list-unstyled">
+						{% for children in category['children']|slice(0, category['children']|length) %}
+						<li>
+							<a href="{{ children['href'] }}">{{ children['name'] }}</a>
+							{% if (children['subchildren']) %} 
+							<ul class="list-unstyled">
+								{% for subchild in children['subchildren'] %} 
+								<li><a href="{{ subchild['href'] }}"> - {{ subchild['name'] }}</a></li>
+								{% endfor %} 
+							</ul>
+							{% endif %} 
+						</li>					
+					{% endfor %} 
+					</ul>
+				</li>
+				{% else %} 
+				<li><a href="{{ category['href'] }}">{{ category['name'] }}</a></li>
+				{% endif %} 
+				
+				{% endfor %} 
+			</ul>
+		</div>
+	</div>
+</div>
+
+<script>
+	;(function ($) {
+		$(window).load(function () {
+			var o = $('.category_menu');
+			o.find('li li li a').each(function () {
+				if ($(location).attr('href').indexOf($(this).attr('href')) >= 0){
+					$(this).addClass('active');
+					return;
+				}
+			});
+			if (jQuery('.category_menu li a').hasClass('active')) { } else {				
+				o.find('li li a').each(function () {
+					if ($(location).attr('href').indexOf($(this).attr('href')) >= 0){
+						$(this).addClass('active');
+						return;
+					}
+				});
+			}
+			if (jQuery('.category_menu li a').hasClass('active')) { } else {				
+				o.find('li a').each(function () {
+					if ($(location).attr('href').indexOf($(this).attr('href')) >= 0){
+						$(this).addClass('active');
+						return;
+					}
+				});
+			}
+			
+			jQuery('.category_menu').find('li.parent').prepend('<i class="fa fa-caret-down"></i>');
+			jQuery('.category_menu').find('a.active').closest('li.parent').find('> ul').slideToggle().closest('li.parent').find('>i').removeClass('fa-caret-down').addClass('fa-caret-up');
+			jQuery('.category_menu li.parent i').on("click", function(){
+				if (jQuery(this).hasClass('fa-caret-up')) { 
+					jQuery(this).removeClass('fa-caret-up').addClass('fa-caret-down').parent('li.parent').find('> ul').slideToggle(); }  else {
+				jQuery(this).removeClass('fa-caret-down').addClass('fa-caret-up').parent('li.parent').find('> ul').slideToggle();
+				}
+			});
+			
+		});		
+	})(jQuery);
+</script>
+

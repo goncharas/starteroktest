@@ -1,0 +1,10 @@
+{% if (informations) %} 
+	<div class="block-info">
+		<h3 class="box-heading">{{text_information}}</h3>
+		<ul class="box-content list-unstyled">
+			{% for information in informations %} 
+			<li><a href="{{ information['href'] }}">{{information['title']}}</a></li>
+			{% endfor %} 			
+		</ul>
+	</div>
+{% endif %}

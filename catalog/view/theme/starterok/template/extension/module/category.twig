@@ -1,0 +1,20 @@
+<div class="list-group">
+    <ul class="aside-menu">
+    {% for category in categories %}
+        <li>
+            <a href="{{ category.href }}" class="list-group-item {% if category.category_id == category_id %} active{% endif %}{% if category.children %} has-children{% endif %}">
+                <span class="icon ic-cat" style="background-image: url({{ category.thumb }});"></span>{{ category.name }}
+            </a>
+            {% if category.children %}
+                <ul>
+                {% for child in category.children %}
+                    <li>                    
+                        <a href="{{ child.href }}" class="list-group-item {% if child.category_id == child_id %} active{% endif %}">-&nbsp;{{ child.name }}</a> 
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+</div>

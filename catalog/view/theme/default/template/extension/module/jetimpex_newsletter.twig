@@ -1,0 +1,52 @@
+<div id="jetimpex-newsletter" class="box newsletter">	
+	<div class="box-content seo-text-short">
+		{% if description %}
+			{{ description }}
+		{% endif %}
+		{% if name != 'savinFooterMainSEOText' %}
+		<form method="post" enctype="multipart/form-data" id="jetimpex-newsletter-form">
+			<div class="jetimpex-login-form">
+				<label class="control-label" for="input-jetimpex-newsletter-email"></label>
+				<input type="text" name="jetimpex_newsletter_email" value="" placeholder="{{ entry_mail }}"
+				id="input-jetimpex-newsletter-email" class="form-control"/>
+			</div>
+			<button type="submit" id="jetimpex-newsletter-button" class="btn">{{ button_subscribe }}</button>
+			<span id="jetimpex-newsletter_error" class="newsletter-error"></span>
+			<span id="jetimpex-newsletter_success" class="newsletter-success"></span>
+		</form>
+		{% endif %}
+	</div>
+	<div class="seo-text-more">
+        <a class="btn pull-right" href="#jetimpex-newsletter" id="seo-text-read-more">Читать далее</a>
+	</div>
+</div>
+<script>
+	$(document).ready(function () {
+		$('#jetimpex-newsletter').submit(function (e) {
+			e.preventDefault();
+			var email = $("#input-jetimpex-newsletter-email").val();
+			var emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/igm;
+			if (emailRegex.test(email)) {
+				var dataString = 'jetimpex_newsletter_email=' + email;
+				$.ajax({
+					type: "POST",
+					url: "index.php?route=extension/module/jetimpex_newsletter/addNewsletter",
+					data: dataString,
+					cache: false,
+					success: function (result) {
+						if (!result){
+							$('#jetimpex-newsletter_error').html('');
+							$('#jetimpex-newsletter_success').stop(true, true).html('{{text_success}}').fadeIn(300).delay(4000).fadeOut(300);
+						} else {
+							$('#jetimpex-newsletter_success').html('');
+							$('#jetimpex-newsletter_error').stop(true, true).html(result).fadeIn(300).delay(4000).fadeOut(300);
+						}
+					}
+				});
+			} else {
+				$('#jetimpex-newsletter_success').html('');
+				$('#jetimpex-newsletter_error').stop(true, true).html('{{error_invalid_email}}').fadeIn(300).delay(4000).fadeOut(300);
+			}
+		});
+	});
+</script>

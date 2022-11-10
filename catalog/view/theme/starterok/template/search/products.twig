@@ -1,0 +1,284 @@
+{{ header }}
+<div id="product-category" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+        {% if loop.last %}
+            <li><span class="last">{{ breadcrumb.text }}</span></li>
+        {% else %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endif %}
+    {% endfor %}
+  </ul>
+  <div class="row">
+    {% if column_menu %}
+      {{ column_menu }}
+    {% endif %}
+    {% if column_menu and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_menu or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+        <h1>{{ heading_title }}</h1>
+        {% if thumb%}
+          <div class="row">
+            <div class="col-sm-2"><img src="{{ thumb }}" alt="{{ heading_title }}" title="{{ heading_title }}" class="img-thumbnail" /></div>
+          </div>
+          <hr>
+        {% endif %}
+      
+        {% if categories %}
+            <h3>{{ text_refine }}</h3>
+            {% if categories|length <= 5 %}
+                <div class="row">
+                  <div class="col-sm-3">
+                    <ul>
+                      {% for category in categories %}
+                      <li><a href="{{ category.href }}">{{ category.name }}</a></li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <ul class="subcat-list">
+                    {% for category in categories %}
+                        <li class="col-sm-3 subcat-list__item">
+                            <div class="thumb">
+                                {% if (category['thumb']) %}
+                                    <div class="image">
+                                        <a href="{{ category['href'] }}" class="subcat-list__item__link">
+                                            <img width="{{ thumb_width }}" height="{{ thumb_height }}" src="{{ category['thumb'] }}" alt="{{ category['name'] }}" />
+                                        </a>
+                                    </div>
+                                {% endif %}    
+                                <div class="subcat-list__item__name">
+                                    <a href="{{ category['href'] }}">{{ category['name'] }}</a>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+                <br />
+            {% endif %}
+        {% endif %}
+        
+        {% if products %}
+            <div class="row">
+              <div class="col-md-2 col-sm-6 hidden-xs">
+                <div class="btn-group btn-group-sm">
+                  <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_list }}"><i class="fa fa-th-list"></i></button>
+                  <button type="button" id="grid-view" class="btn btn-default" data-toggle="tooltip" title="{{ button_grid }}"><i class="fa fa-th"></i></button>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6"> {#col-md-3#}
+{#                <div class="form-group"><a href="{{ compare }}" id="compare-total" class="btn btn-link">{{ text_compare }}</a></div>#}
+              </div>
+              <div class="col-md-4 col-xs-6">
+                <div class="form-group input-group input-group-sm">
+                  <label class="input-group-addon" for="input-sort">{{ text_sort }}</label>
+                  <select id="input-sort" class="form-control" onchange="location = this.value;">
+
+
+
+                    {% for sorts in sorts %}
+                    {% if sorts.value == '%s-%s'|format(sort, order) %}
+
+
+
+                    <option value="{{ sorts.href }}" selected="selected">{{ sorts.text }}</option>
+
+
+
+                    {% else %}
+
+
+
+                    <option value="{{ sorts.href }}">{{ sorts.text }}</option>
+
+
+
+                    {% endif %}
+                    {% endfor %}
+
+
+
+                  </select>
+                </div>
+              </div>
+              {#<div class="col-md-3 col-xs-6">
+                <div class="form-group input-group input-group-sm">
+                  <label class="input-group-addon" for="input-limit">{{ text_limit }}</label>
+                  <select id="input-limit" class="form-control" onchange="location = this.value;">
+
+
+
+                    {% for limits in limits %}
+                    {% if limits.value == limit %}
+
+
+
+                    <option value="{{ limits.href }}" selected="selected">{{ limits.text }}</option>
+
+
+
+                    {% else %}
+
+
+
+                    <option value="{{ limits.href }}">{{ limits.text }}</option>
+
+
+
+                    {% endif %}
+                    {% endfor %}
+
+
+
+                  </select>
+                </div>
+              </div>#}
+            </div>
+                    
+            <div class="row">
+                {% for product in products %}
+                <div class="product-layout product-list col-xs-12">
+                  <div class="product-thumb">
+                    <div class="image"><a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" /></a></div>
+                    <div>
+                      <div class="caption">
+                        <h4><a href="{{ product.href }}" class="product-thumb__caption__link">{{ product.name }}</a></h4>
+                        {% if 1 == 0 %}
+                        <div class="product-thumb__stock">
+                            {{ text_stock }} &nbsp {{ product.stock }}
+                        </div>
+                        {% endif %}
+                        {% if product.price %}
+                        <p class="price"> 
+                          {% if not product.special %}
+                              {{ product.price }}
+                          {% else %} 
+                              <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span> 
+                          {% endif %}
+                        </p>
+                        {% endif %}
+                        {% if product.rating %}
+                        <div class="rating"> {% for i in 1..5 %}
+                          {% if product.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>{% endif %}
+                          {% endfor %} </div>
+                        {% endif %} </div>
+                      <div class="button-group">
+                        <button type="button" onclick="location = '{{ product.href }}';"><i class="fa fa-shopping-cart"></i> <span class="hidden-xs hidden-sm hidden-md">{{ button_cart }}</span></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+            </div>
+                  
+            {#<div class="row">
+              <div class="col-sm-6 text-left">{{ pagination }}</div>
+              <div class="col-sm-6 text-right">{{ results }}</div>
+            </div>#}
+             
+            {% if reviews is defined and reviews %}
+            <div class="row"> 
+                <div class="col-sm-12">
+                    <div class="product-list__review-card-list">
+                    {% for review in reviews %}
+                      <div class="review-card">
+                          <div class="review-card-author">
+                              {{ review.author }}
+                          </div>
+                          <div class="review-card-line">
+                            <div class="review-card-rating rating">
+                                  {% for i in 1..5 %}
+                                  {% if review.rating < i %}<span class="fa fa-stack"><i class="fa fa-star-o fa-stack-1x"></i></span>{% else %}<span class="fa fa-stack"><i class="fa fa-star fa-stack-1x"></i><i class="fa fa-star-o fa-stack-1x"></i></span>{% endif %}
+                                  {% endfor %}                    
+                                  {#{% for i in 1..5 %}
+                                  {% if review.rating < i %} <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> {% else %} <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> {% endif %}
+                                  {% endfor %}#}
+                            </div>
+                            <div class="review-card-date">
+                                {{ review.date_added }}
+                            </div>
+                          </div>
+                          <div class="review-card-text">
+            {#                  <span class="review-card-text-qstart">“</span>#}
+                              <span class="review-card-text-q">{{ review.text }}</span>
+            {#                  <span class="review-card-text-qend">”</span>#}
+                          </div>
+                          <div class="review-card__product">
+                            <div class="review-card__product-image"><a href="{{ review.href }}"><img src="{{ review.image }}" alt="{{ review.name }}" title="{{ review.name }}" class="img-responsive" /></a></div>
+                            <div class="review-card__product-name"><a href="{{ review.href }}">{{ review.name }}</a></div>
+            {#                <div class="review-card__product-name">{% if product.price %}
+                            <p class="price"> 
+                              {% if not product.special %}
+                                  {{ product.price }}
+                              {% else %} 
+                                  <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span> 
+                              {% endif %}
+                            </p>
+                            {% endif %}</div>#}
+                          </div>
+                      </div>
+                    {% endfor %} 
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+    
+            {% if description %}
+            <div class="row">
+                <div class="col-sm-12">{{ description }}</div>
+            </div>
+            {% endif %}
+        {% endif %}
+            
+        {% if tecdocProducts %}
+          <div style="margin: 1rem; padding: 0.5rem; height: 200px; overflow-y: auto; background: #eee; border: 2px solid gray;">
+              <table>
+                  {% for tcdProduct in tecdocProducts %}
+                      <tr>
+                          <td>{{ tcdProduct.part_number }}</td>
+                          <td>{{ tcdProduct.supplier_name }}</td>
+                          <td>{{ tcdProduct.product_name }}</td>
+                      </tr>
+                  {% endfor %}
+              </table>
+          </div>
+        {% endif %}
+
+        {% if tecdocCategoryId != '' %}
+            {% if not categories and not products %}
+              <p>{{ text_empty }}</p>
+              <div class="buttons">
+                <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+              </div>
+            {% endif %}
+        {% else %}
+            {% if column_menu %}
+                <p class="text-center" style="padding: 2rem;">{{ products_init }}</p>
+            {% else %}
+                <p class="text-center" style="padding: 2rem;">{{ text_empty }}</p>
+            {% endif %}
+        {% endif %}
+      
+        {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    let tdcCategory = $('.tdc-menu .list-group-item.active').html();
+    console.log(tdcCategory);
+    
+    if (typeof tdcCategory !== 'undefined' && tdcCategory !== '') {
+        $('#content h1').html( $('#content h1').html() +': '+ tdcCategory);
+    }
+});</script>
+{{ footer }} 

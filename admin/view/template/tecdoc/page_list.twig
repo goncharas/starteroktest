@@ -1,0 +1,154 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="button" data-toggle="tooltip" title="{{ button_filter }}" onclick="$('#filter-product').toggleClass('hidden-sm hidden-xs');" class="btn btn-default hidden-md hidden-lg"><i class="fa fa-filter"></i></button>
+        <a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="btn btn-primary"><i class="fa fa-plus"></i></a>
+        {#<button type="submit" form="form-page" formaction="{{ enabled }}" data-toggle="tooltip" title="{{ button_enable }}" class="btn btn-default"><i class="fa fa-play"></i></button>
+		<button type="submit" form="form-page" formaction="{{ disabled }}" data-toggle="tooltip" title="{{ button_disable }}" class="btn btn-default"><i class="fa fa-pause"></i></button>#}
+		<button type="button" form="form-page" formaction="{{ delete }}" data-mass-action="delete" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger" onclick="confirm('{{ text_confirm }}') ? deleteItems() : false;"><i class="fa fa-trash-o"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">{% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="row">
+      <div id="filter-product" class="col-md-3 col-md-push-9 col-sm-12 hidden-sm hidden-xs">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-filter"></i> {{ text_filter }}</h3>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="control-label" for="input-url">{{ entry_url }}</label>
+			  <div class="input-group">
+              <input type="text" name="filter_url" value="{{ filter_url }}" placeholder="{{ entry_url }}" id="input-url" class="form-control" />
+			  <div class="input-group-btn">
+                    <button type="button" id="button-clear-input-url" class="btn btn-default"><i class="fa fa-times"></i></button>
+			</div>
+			</div>
+			</div>
+            
+            
+            <div class="form-group text-right">
+              <button type="button" id="button-filter" class="btn btn-default"><i class="fa fa-filter"></i> {{ button_filter }}</button>
+			  <button type="button" id="button-clear-filter" class="btn btn-default"><i class="fa fa-times"></i><span class="hidden-sm"> {{ button_clear }}</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9 col-md-pull-3 col-sm-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+          </div>
+          <div class="panel-body">
+            <form action="{{ enabled }}" method="post" enctype="multipart/form-data" id="form-page">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td style="width: 1px;" class="text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                      <td class="text-left">{% if sort == 'datatype' %} <a href="{{ sort_datatype }}" class="{{ order|lower }}">{{ column_datatype }}</a> {% else %} <a href="{{ sort_datatype }}">{{ column_datatype }}</a> {% endif %}</td>
+                      <td class="text-left">{% if sort == 'url' %} <a href="{{ sort_url }}" class="{{ order|lower }}">{{ column_url }}</a> {% else %} <a href="{{ sort_url }}">{{ column_url }}</a> {% endif %}</td>
+                      <td class="text-left">{% if sort == 'meta_title' %} <a href="{{ sort_meta_title }}" class="{{ order|lower }}">{{ column_meta_title }}</a> {% else %} <a href="{{ sort_meta_title }}">{{ column_meta_title }}</a> {% endif %}</td>
+                      <td class="text-left">{{ column_meta_description }}</td>
+                      <td class="text-left">{{ column_description }}</td>
+					  <td class="text-right">{{ column_action }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  
+                  {% if items %}
+                  {% for item in items %}
+                  <tr>
+                    <td class="text-center">{% if item.id in selected %}
+                      <input type="checkbox" name="selected[]" value="{{ item.id }}" checked="checked" />
+                      {% else %}
+                      <input type="checkbox" name="selected[]" value="{{ item.id }}" />
+                      {% endif %}</td>
+                    <td class="text-left">{{ item.datatype }}</td>
+                    <td class="text-left">{{ item.url }}</td>
+                    <td class="text-left">{{ item.meta_title }}</td>
+                    <td class="text-center">{% if item.meta_description == 1 %} <span class="fa fa-check"></span> {% endif %}</td>
+                    <td class="text-center">{% if item.description == 1 %} <span class="fa fa-check"></span> {% endif %}</td>
+                    <td class="text-right">
+						<a href="{{ item.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+					</td>
+                  </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td class="text-center" colspan="9">{{ text_no_results }}</td>
+                  </tr>
+                  {% endif %}
+                    </tbody>
+                  
+                </table>
+              </div>
+            </form>
+            <div class="row">
+              <div class="col-sm-6 text-left">{{ pagination }}</div>
+              <div class="col-sm-6 text-right">{{ results }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript"><!--
+$('#button-filter').on('click', function() {
+	var url = '';
+
+	var filter_url = $('input[name=\'filter_url\']').val();
+
+	if (filter_url) {
+		url += '&filter_url=' + encodeURIComponent(filter_url);
+	}
+
+	location = 'index.php?route=tecdoc/page&user_token={{ user_token }}' + url;
+});
+$('#button-clear-filter').on('click', function() {
+	location = 'index.php?route=tecdoc/page&user_token={{ user_token }}';
+});
+//--></script> 
+  <script type="text/javascript"><!--
+// IE and Edge fix!
+$('button[form=\'form-page\']').on('click', function(e) {
+	$('#form-page').attr('action', $(this).attr('formaction'));
+    console.log($('#form-page').attr('action'));
+});
+
+$('#button-clear-input-url').on('click',function(){
+	$('input[name=\'filter_url\']').val('');
+	$('#button-filter').trigger('click');
+});
+
+$('input[name=\'filter_url\']').keypress(function (e) {
+	if (e.which == 13) {
+		$('#button-filter').trigger('click');
+		return false;
+	}
+});
+
+function deleteItems() {
+    $('#form-page').attr('action', $('button[data-mass-action="delete"]').attr('formaction')); 
+    $('#form-page').submit();
+}
+//--></script></div>
+{{ footer }} 

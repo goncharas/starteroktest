@@ -1,0 +1,311 @@
+{{ header }}{{ column_left }}
+<div id="content">
+<div class="page-header">
+    <div class="container-fluid">
+        <div class="pull-right">
+            <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+        <h1>{{ heading_title }}</h1>
+        <ul class="breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+{% if error_warning %}
+<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %}
+
+{% if success %}
+<div class="alert alert-success"><i class="fa fa-check-circle"></i> {{ success }}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+</div>
+{% endif %}
+
+<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form"
+      class="form-horizontal">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ main_settings }}</h3>
+    </div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="source_language_code">{{ source_language }}</label>
+
+            <div class="col-sm-10">
+                <select name="source_language_code" id="source_language_code" class="form-control">
+					{% for language in languages %}
+                     <option value="{{ language.code }}" {% if language.code == source_language_code %} selected="selected" {% endif %}> {{ language.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="do_transliteration">{{ transliteration }}</label>
+
+            <div class="col-sm-10">
+                <input type="hidden" name="do_transliteration" value="0">
+
+                <div class="checkbox">
+                    <label><input type="checkbox" name="do_transliteration" {% if do_transliteration == 1 %} checked="checked" value="1" {% endif %}/> {{ transliteration_detail }}</label></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ categories }}</h3>
+    </div>
+    <div class="panel-body">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="categories_template">{{ template }}</label>
+
+            <div class="col-sm-10">
+                <input type="text" id="categories_template" name="categories_template" value="{{ categories_template }}" class="form-control">
+
+                <p>{{ available_category_tags }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="categories_suffix">{{ extension }}</label>
+
+            <div class="col-sm-10">
+                <input type="text" id="categories_suffix" name="categories_suffix" value="{{ categories_suffix }}" class="form-control">
+
+                <p>{{ extension_warning }}</p>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="categories_suffix">{{ overwrite }}</label>
+
+            <div class="col-sm-10">
+                <select name="overwrite_categories" id="overwrite_categories" class="form-control">
+                    <option value="overwrite">{{ overwrite_all }}</option>
+                    <option value="dont_overwrite">{{ dont_overwrite }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="categories">{{ generate }}</label>
+
+            <div class="col-sm-10">
+                <button type="submit" id="categories" name="categories" value="categories" class="btn btn-primary">{{ generate }}</button>
+                <p>{{ warning_clear }}</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ products }}</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="products_template">{{ template }}</label>
+
+            <div class="col-sm-10">
+                <input type="text" id="products_template" name="products_template" value="{{ products_template }}" class="form-control">
+
+                <p>{{ available_product_tags }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="products_suffix">{{ extension }}</label>
+
+            <div class="col-sm-10">
+                <input type="text" id="products_suffix" name="products_suffix" value="{{ products_suffix }}" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="overwrite_products">{{ overwrite }}</label>
+
+            <div class="col-sm-10">
+                <select name="overwrite_products" id="overwrite_products" class="form-control">
+                    <option value="overwrite">{{ overwrite_all }}</option>
+                    <option value="dont_overwrite">{{ dont_overwrite }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="products">{{ generate }}</label>
+
+            <div class="col-sm-10">
+                <button type="submit" name="products" value="products" class="btn btn-primary">{{ generate }}</button>
+                <p>{{ warning_clear }}</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ manufacturers }}</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="manufacturers_template">{{ template }}</label>
+
+            <div class="col-sm-10">
+                <input type="text" id="manufacturers_template" name="manufacturers_template" value="{{ manufacturers_template }}" class="form-control">
+
+                <p>{{ available_manufacturer_tags }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="manufacturers_suffix">{{ extension }}</label>
+
+            <div class="col-sm-10">
+                <input type="text" id="manufacturers_suffix" name="manufacturers_suffix" value="{{ manufacturers_suffix }}" class="form-control">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="overwrite_manufacturers">{{ overwrite }}</label>
+
+            <div class="col-sm-10">
+                <select name="overwrite_manufacturers" id="overwrite_manufacturers" class="form-control">
+                    <option value="overwrite">{{ overwrite_all }}</option>
+                    <option value="dont_overwrite">{{ dont_overwrite }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="manufacturers">{{ generate }}</label>
+
+            <div class="col-sm-10">
+                <button type="submit" name="manufacturers" value="manufacturers" class="btn btn-primary">{{ generate }}</button>
+                <p>{{ warning_clear }}</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ products_meta_keywords }}</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="meta_template">{{ template }}</label>
+
+            <div class="col-sm-10">
+                <input type="text" id="meta_template" name="meta_template" value="{{ meta_template }}" class="form-control">
+
+                <p>{{ available_meta_tags }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="meta_keywords">{{ generate }}</label>
+
+            <div class="col-sm-10">
+                <button type="submit" name="meta_keywords" value="meta_keywords" class="btn btn-primary">{{ generate }}</button>
+                <p>{{ warning_clear_meta }}</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ categories_meta_keywords }}</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="categories_meta_template">{{ template }}</label>
+
+            <div class="col-sm-10">
+                <select id="categories_meta_template" name="categories_meta_template" class="form-control">
+                    <option value="parents">{{ categories_meta_keywords_template_parents }}</option>
+                    <option value="no_parents">{{ categories_meta_keywords_template_no_parents }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="meta_keywords">{{ generate }}</label>
+
+            <div class="col-sm-10">
+                <button type="submit" id="categories_meta_keywords" name="categories_meta_keywords" value="categories_meta_keywords" class="btn btn-primary">{{ generate }}</button>
+                <p>{{ warning_clear_meta }}</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ tags }}</h3>
+    </div>
+
+    <div class="panel-body">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="tags_template">{{ template }}</label>
+
+            <div class="col-sm-10">
+                <input type="text" id="tags_template" name="tags_template" value="{{ tags_template }}" class="form-control">
+
+                <p>{{ available_tags_tags }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="tags">{{ generate }}</label>
+
+            <div class="col-sm-10">
+                <button type="submit" name="tags" value="tags" class="btn btn-primary">{{ generate }}</button>
+                <p>{{ warning_clear_tags }}</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+</form>
+
+</div>
+</div>
+{{ footer }}

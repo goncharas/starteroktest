@@ -1,0 +1,56 @@
+# Config and Htaccess Files
+/.htaccess
+/config.php
+/debug_protokol.php
+/admin/config.php
+
+# Sitemap files
+/sitemap/
+/sitemap/*
+
+# Image Cache Files
+/image/cache/*
+!/image/cache/index.html
+/image/catalog
+
+# Backup Files
+/storage/backup/*
+!/storage/backup/index.html
+
+# System Cache Files
+/storage/cache/*
+!/storage/cache/index.html
+
+# Download Files
+/storage/download/*
+!/storage/download/index.html
+
+# Log Files
+/storage/logs/
+/storage/logs/*
+!/storage/logs/index.html
+
+# Marketplace Files
+# /storage/marketplace/*
+# !/storage/marketplace/index.html
+
+# Session Files
+/storage/session/*
+!/storage/session/index.html
+
+# Modification Files
+/storage/modification/*
+
+# Upload Files
+/storage/upload/*
+!/storage/upload/index.html
+
+# this file is being rebuilt by adminsection when option CSS cache is OFF
+/admin/view/stylesheet/bootstrap.css
+
+# If you want to ignore install file use following lines [on development mode]
+# /upload/install/*
+
+# IDE Project filescd  xampp
+/.idea
+/nbproject

@@ -1,0 +1,103 @@
+{{ header }}
+<div id="information-information" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+	{% if breadcrumb == breadcrumbs|last %}
+		<li><span>{{ breadcrumb.text }}</span></li>
+	{% else %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+	{% endif %}
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <h1>{{ heading_title }}</h1>
+      {{ description }}
+{% if contact_form_type is defined %}
+    <div id="contact-form" class="embed-form">
+    <form>
+        <div class="alert hidden"></div>
+        <input type="hidden" name="type" value="{{ contact_form_type }}">
+        <div class="row">
+            <div class="col-md-4 col-xs-6">
+                <div class="form-group required">
+                    <label for="contact-form-name" class="control-label">{{ contact_form_field_name }}</label>   
+                    <input type="text" name="name" value="" id="contact-form-name" class="form-control" placeholder="">
+                </div>
+            </div>  
+            <div class="col-md-4 col-xs-6">
+                <div class="form-group">
+                    <label for="contact-form-email" class="control-label">{{ contact_form_field_email }}</label>   
+                    <input type="text" name="email" value="" id="contact-form-email" class="form-control" placeholder="">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group required">
+                    <label for="contact-form-phone" class="control-label">{{ contact_form_field_phone }}</label>   
+                    <input type="text" name="phone" value="" id="contact-form-phone" class="form-control" placeholder="">
+                </div>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group required">
+                    <label for="contact-form-enquiry" class="control-label">{{ contact_form_field_message }}</label>   
+                    <textarea name="enquiry" id="contact-form-enquiry" cols="40" rows="6" class="form-control" aria-invalid="false" placeholder=""></textarea>
+                   {# <div class="small">{{ text_message_note }}</div>#}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-primary">{{ text_message_button }}</button>
+        </div>
+    </form>
+    </div>
+{% endif %}
+      
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{% if contact_form_type is defined %}
+<script>
+$('#contact-form .btn-primary').click(function(e) {
+    e.preventDefault();
+
+	let data = $('#contact-form').find('form').serialize(); 
+
+    $.ajax({
+        url: 'index.php?route=ajax/contact',
+        type: 'post',
+        data: data,
+        dataType: 'json',
+        success: function(json) {
+            $('#contact-form .alert').html('').removeClass('alert-danger alert-success').addClass('hidden');
+            $('.form-group').removeClass('has-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                //$('#contact-form input[type="hidden"]').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+                $('#contact-form .alert').html('<i class="fa fa-exclamation-circle"></i>' + json['error']['warning']).addClass('alert-danger').removeClass('hidden');
+                //$('#contact-form input[name="'+json['error']['field']+'"]').closest('.form-group').addClass('has-error');
+                $('#contact-form #contact-form-'+json['error']['field']).closest('.form-group').addClass('has-error');
+
+		   } else {
+                $('#contact-form .alert').html(json['success']).addClass('alert-success').removeClass('hidden');
+                $('#contact-form input[type="text"], #contact-form textarea').val('');
+		   }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.log(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+</script>
+{% endif %}    
+{{ footer }}

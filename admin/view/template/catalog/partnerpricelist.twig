@@ -1,0 +1,99 @@
+	<div>
+		<form class="form-browse">
+            <h3>Список товаров поставщика&nbsp&nbsp {{ title }}	&nbsp&nbspне прошедших обработку</h3>		
+			<input type="hidden" name="location_id" value="{{pumpprice_currency}}" />
+			<input type="hidden" name="page" value="{{ page }}" />
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-left">Наименование</td>
+                  <td class="text-center">Артикул</td>
+				  <td class="text-center">Бренд</td>
+				  <td class="text-right">Кол-во</td>
+				  <td class="text-right">Цена</td>
+				  <td class="text-center">Нет в каталоге /<br/>Не найден бренд</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if partnerprice_list %}
+                {% for category in partnerprice_list %}
+                <tr>
+                  <td class="left">{{ category.product_name }}</td>
+                  <td class="text-center">{{ category.vendor_code_raw }}</td>
+				  <td class="text-center">{{ category.product_brand }}</td>
+				  <td class="text-right">{{ category.quantity }}</td>
+				  <td class="text-right">{{ category.price }}</td>
+				  <td class="text-left">{% if category.ctgr_count == 1 %}Нет в каталоге {% else %}Не найден бренд{% endif %}</td>
+				  </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="7">Таблица импорта пустая</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 text-left">{{ pagination }}</div>
+<!--            <a href="#" class="select-car__link" onclick="car_link__click(); return false;"><span>{{ text_choicebyauto }}</span></a> -->
+          </div>
+		</form>
+	</div>
+    
+<script type="text/javascript">
+
+$(document).ready(function() {
+	
+});
+
+function getpartnerprice_list(page){
+   var e = $('form[class=\'form-browse\']')[0];
+   $(e).find('input[name=\'page\']').val(page);
+   getpartnerprice();
+}
+
+function getpartnerprice(){
+  var e = $('form[class=\'form-browse\']')[0];
+  var page = $(e).find('input[name=\'page\']').val();
+  var location_id = $(e).find('input[name=\'location_id\']').val();
+ // var mydata = new FormData(e); //.serialize();
+  var my_url = 'index.php?route=catalog/partnerprice/getpartnerprice_list&user_token={{ user_token }}'+'&page='+page+'&location_id='+location_id;
+//  var data = $(e).serialize();
+  var data = 'locationid='+location_id;
+  
+$.ajax({
+				url: my_url,
+				type: 'get',
+				dataType: 'json',
+				data: data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					// $('#button-upload').button('loading');
+				},
+				complete: function() {
+					// $('#button-upload').button('reset');
+				},
+				success: function(json) {
+					if (json['warning']) {
+						alert(json['warning']);
+					} else if(json['form_browse']) {
+ //alert('page='+page);
+                       html = json['form_browse'];
+                       $('#tab-browse > div').remove();
+					   $('#tab-browse').html(json['form_browse']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+	
+}
+
+
+</script>

@@ -1,0 +1,107 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ refresh }}" method="post" enctype="multipart/form-data" id="form-partnerprice">
+		  <label for="deviation0">{{ text_deviation}}&nbsp0%</label>&nbsp&nbsp&nbsp
+		  <input type="radio" name="deviation" value="0" {% if deviation == 0 %} checked {% endif %} id="deviation0" />&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		  <label for="deviation20">{{ text_deviation}}&nbsp20%</label>&nbsp&nbsp&nbsp
+		  <input type="radio" name="deviation" value="20" {% if deviation == 20 %} checked {% endif %} id="deviation20" />&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		  <label for="deviation50">{{ text_deviation}}&nbsp50%</label>&nbsp&nbsp&nbsp
+		  <input type="radio" name="deviation" value="50" {% if deviation == 50 %} checked {% endif %} id="deviation50" />&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+		  <label for="deviation100">{{ text_deviation}}&nbsp100%</label>&nbsp&nbsp&nbsp
+		  <input type="radio" name="deviation" value="100" {% if deviation == 100 %} checked {% endif %} id="deviation100" />
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td class="text-left">{% if sort == 'location' %}
+                    <a href="{{ sort_location }}" class="{{ order|lower }}">{{ column_location }}</a>
+                    {% else %}
+                    <a href="{{ sort_location }}">{{ column_location }}</a>
+                    {% endif %}</td>
+                  <td class="text-center">{% if sort == 'name' %}
+                    <a href="{{ sort_name }}" class="{{ order|lower }}">{{ column_name }}</a>
+                    {% else %}
+                    <a href="{{ sort_name }}">{{ column_name }}</a>
+                    {% endif %}</td>
+                  <td class="text-center">{% if sort == 'partner_brand' %}
+                    <a href="{{ sort_partner_brand }}" class="{{ order|lower }}">{{ column_partner_brand }}</a>
+                    {% else %}
+                    <a href="{{ sort_partner_brand }}">{{ column_partner_brand }}</a>
+                    {% endif %}</td>
+                  <td class="text-left">{% if sort == 'cgd_name' %}
+                    <a href="{{ sort_cgd_name }}" class="{{ order|lower }}">{{ column_cgd_name }}</a>
+                    {% else %}
+                    <a href="{{ sort_cgd_name }}">{{ column_cgd_name }}</a>
+                    {% endif %}</td>
+				  <td class="text-left">{{ column_minprice }}</td>
+				  <td class="text-left">{{ column_maxprice }}</td>
+				  <td class="text-left">{{ column_deviation }}</td>
+                  <td class="text-center">{{ column_action }}</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% if partnerprices %}
+                {% for partnerprice in partnerprices %}
+                <tr>
+                  <td class="text-left">{{ partnerprice.location }}</td>
+                  <td class="text-left">{{ partnerprice.name }}</td>
+                  <td class="text-left">{{ partnerprice.partner_brand }}</td>
+                  <td class="text-left">{{ partnerprice.cgd_name }}</td>
+                  <td class="text-right">{{ partnerprice.minprice }}</td>
+                  <td class="text-right">{{ partnerprice.maxprice }}</td>
+                  <td class="text-right">{{ partnerprice.deviation }}</td>
+                  <td class="text-right"><a href="{{ partnerprice.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="btn btn-primary"><i class="fa fa-pencil"></i></a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="text-center" colspan="6">{{ text_no_results }}</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col-sm-6 text-left">{{ pagination }}</div>
+          <div class="col-sm-6 text-right">{{ results }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<script type="text/javascript">
+ 
+$('input[name=\'deviation\']').click(function(){
+  $('#form-partnerprice').submit();
+})
+
+</script>  
+</div>
+{{ footer }} 

@@ -1,0 +1,35 @@
+{{ text_received }}<br />
+
+{{ text_order_id }}&nbsp&nbsp {{ order_id }}<br />
+{{ text_date_added }}&nbsp&nbsp {{ date_added }}<br />
+{{ text_order_status }}&nbsp&nbsp {{ order_status }}<br />
+
+{{ text_product }}<br />
+
+{% for product in products %}
+{{ product.quantity }}x&nbsp&nbsp {{ product.name }}&nbsp&nbsp ({{ product.model }})&nbsp&nbsp {{ product.total }}<br />
+{% if option %}
+{% for option in product.option %}
+	- {{ option.name }}&nbsp&nbsp {{ option.value }}
+{% endfor %}
+{% endif %}
+{% endfor %} 
+{% if vouchers %}
+<br />
+{% for voucher in vouchers %}
+1x {{ voucher.description }}&nbsp&nbsp {{ voucher.amount }}
+{% endfor %} 
+{% endif %}
+<br />
+{{ text_total }}
+<br />
+{% for total in totals %}
+{{ total.title }}:&nbsp&nbsp {{ total.value }}<br />
+{% endfor %} 
+  
+{% if comment %}<br />
+{{ text_comment }}
+<br />
+{{ comment }}
+{% endif %}
+

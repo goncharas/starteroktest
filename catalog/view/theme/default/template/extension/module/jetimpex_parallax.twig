@@ -1,0 +1,25 @@
+<!-- RD Parallax -->
+<div id="parallax_{{ module_counter }}" class="rd-parallax">
+	<div class="rd-parallax-layer" data-type="media" data-speed="{{ speed }}" data-direction="{{ direction }}" data-url="{{ image }}" data-blur="{{ blur }}">
+	</div>
+	{% for layer in layers %}
+		<div class="rd-parallax-layer layer-{{ loop.index }}" data-type="{{ layer.type }}" data-speed="{{ layer.speed }}" data-fade="{{ layer.fade }}" data-direction="{{ layer.direction }}" {% if layer.type == 'media' and layer.image %} data-url="{{ layer.image }}" data-blur="{{ layer.blur }}" {% endif %} >
+			{{ layer.description }}
+			{% if layer.type == 'html' and layer.image %}
+				<img width="{{ layer.image_width }}" height="{{ layer.image_height }}" src="{{ layer.image }}" alt="">
+			{% endif %}
+
+			{% if layer.modules %}
+				{% for module in layer.modules %}
+					{{ module }}
+				{% endfor %}
+			{% endif %}
+		</div>
+	{% endfor %}
+</div>
+<script>
+	jQuery(document).ready(function () {
+		jQuery("#parallax_{{ module_counter }}").RDParallax();
+	});
+</script>
+<!-- END RD Parallax-->

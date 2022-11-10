@@ -1,0 +1,86 @@
+{
+{#"@type": "Product",
+"image": "{{ product['thumb'] }}",
+"url": "{{ product['href'] }}",
+"mainEntityOfPage": "{{ product['href'] }}",
+"name": "{{ product['name'] }}",
+"description": "{{ product['microdata_description'] }}",#}
+{#"offers": {
+"@type": "Offer",
+"price": "{{ product['microdata_price'] }}",
+"priceCurrency": "{{ microdata_code }}",
+"priceValidUntil": "2030-01-01"
+}#}
+
+"@context":"https://schema.org/",
+"@type":"Product",
+{% if (microdata_heading_title is defined and microdata_heading_title is not empty) %} 
+"name": "{{ microdata_heading_title }}",
+{% else %}
+"name":"{{ product['name'] }}",
+{% endif %}
+"image":[
+    {% set pi = 1 %}
+    {% for product in microdata_products %}
+    "{{ product['thumb'] }}"{% if (pi != (microdata_products)|length) %},{% endif %}{% set pi = pi + 1 %}
+    {% endfor %} 
+],
+"url":"{{ microdata_url }}",
+"mainEntityOfPage":"{{ microdata_url }}",
+"description":"{{ microdata_description }}"
+{#"brand":{
+    "@type":"brand",
+    "name":""
+},#}
+{% if microdata_products %}
+,"offers":[
+    {% set pi = 1 %}
+    {% for product in microdata_products %}
+    {
+        "@type":"Offer",
+        "url":"{{ product['href'] }}",
+        "priceCurrency":"{{ microdata_code }}",
+        "price":"{{ product['microdata_price'] }}",
+        "priceValidUntil":"2030-01-01",
+        "availability":"https://schema.org/{% if product['quantity'] > 0 %}InStock{% else %}OutOfStock{% endif %}",
+        "sku":"{{ product['sku'] }}"
+    }{% if (pi != (microdata_products)|length) %},{% endif %}{% set pi = pi + 1 %}
+    {% endfor %} 
+]
+{% endif %}
+{% if (microdata_reviews is defined and microdata_reviews) %}
+{#,"review": [
+    {% set ri = 1 %} {% for review_item in microdata_reviews %} 
+    {
+    "@type": "Review",
+    "author": "{{ review_item['author'] }}",
+    "datePublished": "{{ review_item['date_added'] }}",
+    "description": "{{ review_item['text'] }}",
+    "reviewRating": {
+    "@type": "Rating",
+    "bestRating": "5",
+    "ratingValue": "{{ review_item['rating'] }}",
+    "worstRating": "1"
+    }
+    }{% if (ri != (microdata_reviews)|length) %},{% endif %}{% set ri = ri + 1 %} {% endfor %} 
+]#}
+,"review": [
+{% set ri = 1 %} {% for review_item in microdata_reviews %} 
+{
+"@type": "Review",
+{#"author": "{{ review_item['author'] }}",#}
+"author": {"@type": "Person","name": "{{ review_item['author'] }}"},
+{% if (review_item['date_added']) %} "datePublished": "{{ review_item['date_added'] }}",{% endif %} 
+{% if (review_item['text']) %} "description": "{{ review_item['text'] }}",{% endif %} 
+"reviewRating": {"@type": "Rating","bestRating": "5","worstRating": "1","ratingValue": "{{ review_item['rating'] }}"}
+}{% if (ri != (microdata_reviews)|length) %},{% endif %}{% set ri = ri + 1 %} {% endfor %} 
+]
+{% endif %}
+{% if (microdata_review_total is defined and microdata_review_total is not empty) %} 
+,"aggregateRating": {
+"@type": "AggregateRating",
+"ratingValue": "{{ microdata_total_rating_value }}",
+"reviewCount": "{{ microdata_review_total }}"
+}
+{% endif %}
+}

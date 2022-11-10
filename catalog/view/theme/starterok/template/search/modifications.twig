@@ -1,0 +1,56 @@
+{{ header }}
+<div id="information-information" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+        {% if loop.last %}
+            <li><span class="last">{{ breadcrumb.text }}</span></li>
+        {% else %}
+            <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endif %}
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+        <h1>{{ heading_title }}</h1>
+
+        <div class="helper"><i class="fas fa-info-circle icon-left"></i>{{ helper }}</div>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+            <thead><tr>
+                <th>Модель</th>
+                <th>Год производства</th>
+                <th>{% if (type != 'motorbike') %}Двигатель{% endif %}</th>
+            </tr></thead>
+            <tbody>
+            {% set modelName = '' %}
+            {% for modification in modifications %}
+                {% if modelName != modification.model %}
+                    <tr><td colspan="3"><strong>{{ modification.model }}</strong></td></tr>
+                {% endif %}
+                <tr>
+                    <td><a class="" href="{{ modification.href }}">{{ modification.modification }}</a></td>
+                    <td>{{ modification.year }}</td>
+                    <td>{{ modification.engine }}</td>
+                </tr>
+                {% set modelName = modification.model %}
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        
+        {#      {{ description }}#}
+        {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+
+{{ footer }}

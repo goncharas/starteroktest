@@ -1,0 +1,71 @@
+<div class="col-sm-3">
+<div class="list-group">
+    <ul class="aside-menu tdc-menu">
+    {% for category in categories %}
+        <li>
+            {% if category.href == '' %}
+                <span>{{ category.name }}</span>
+            {% else %}
+                <a href="{{ category.href }}" class="list-group-item {% if tecdocCategoryId != '' and category.prd_id == tecdocCategoryId %} active{% endif %}{% if category.children %} has-children{% endif %}">{{ category.name }}</a>
+            {% endif %}
+            
+            {% if category.children %}
+                <ul>
+                {% for child in category.children %}
+                    <li>
+                        {% if child.href == '' %}
+                            <span>{{ child.name }}</span>
+                        {% else %}
+                            <a href="{{ child.href }}" class="list-group-item {% if tecdocCategoryId != '' and child.prd_id == tecdocCategoryId %} active{% endif %}{% if child.children %} has-children{% endif %}">{{ child.name }}</a> 
+                        {% endif %}
+                        
+                        {% if child.children %}
+                            <ul>
+                            {% for child2 in child.children %}
+                                <li>
+                                    {% if child2.href == '' %}
+                                        <span>{{ child2.name }}</span>
+                                    {% else %}
+                                        <a href="{{ child2.href }}" class="list-group-item {% if tecdocCategoryId != '' and child2.prd_id == tecdocCategoryId %} active{% endif %}{% if child2.children %} has-children{% endif %}">{{ child2.name }}</a> 
+                                    {% endif %}
+                                    
+                                    {% if child2.children %}
+                                        <ul>
+                                        {% for child3 in child2.children %}
+                                            <li>
+                                                {% if child2.href == '' %}
+                                                    <span>{{ child2.name }}</span>
+                                                {% else %}
+                                                    <a href="{{ child3.href }}" class="list-group-item {% if tecdocCategoryId != '' and child3.prd_id == tecdocCategoryId %} active{% endif %}{% if child3.children %} has-children{% endif %}">{{ child3.name }}</a> 
+                                                {% endif %}
+                                                
+                                                {% if child3.children %}
+                                                    <ul>
+                                                    {% for child4 in child3.children %}
+                                                        <li>
+                                                            {% if child2.href == '' %}
+                                                                <span>{{ child2.name }}</span>
+                                                            {% else %}
+                                                                <a href="{{ child4.href }}" class="list-group-item {% if tecdocCategoryId != '' and child4.prd_id == tecdocCategoryId %} active{% endif %}{% if child4.children %} has-children{% endif %}">{{ child4.name }}</a> 
+                                                            {% endif %}
+                                                        </li>
+                                                    {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+</div>

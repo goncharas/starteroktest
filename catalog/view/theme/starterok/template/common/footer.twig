@@ -1,0 +1,354 @@
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 col-sm-4 col-xs-12 footer__info">
+        <img src="../image/logo_f.png" alt="">
+        <div class="footer__info__title">{{ text_info }}</div>
+        <div class="footer__info__description">{{ text_description }}</div>
+        <ul class="social-list">
+            <li><a href="https://www.facebook.com/StarterOKofficial" target="_blank" class="ic-facebook"></a></li>
+            <li><a href="https://www.instagram.com/starterokofficial" target="_blank" class="ic-instagram"></a></li>
+            <li><a href="https://www.tiktok.com/@romario0035?_r=1&_d=dgd76fi8209k2a&language=ru&sec_uid=MS4wLjABAAAA3FpDNR5vg5qhDEB7zNPK-E6cbEm6FfbyZmxhUY1Pdv2cAR7_z8jG2mUqTU3BtGzq&share_author_id=6915795167304434694&source=h5_m&u_code=dgd76eg70c691k&sec_user_id=MS4wLjABAAAA3FpDNR5vg5qhDEB7zNPK-E6cbEm6FfbyZmxhUY1Pdv2cAR7_z8jG2mUqTU3BtGzq&utm_source=copy&checksum=4c61b6b4f0d3c667978aaa947a536c89813f10533a2f4855a6462861080854c8&utm_campaign=client_share&utm_medium=ios&tt_from=copy&user_id=6915795167304434694&share_link_id=3FE671ED-C282-4416-AD05-3B90BEF9D806&share_app_id=1233" target="_blank" class="ic-tiktok"></a></li> 
+            <li><a href="https://www.youtube.com/channel/UCuefjwFn8RrYVOrYEB-f7Vw/videos" target="_blank" class="ic-youtube"></a></li>
+            <li><a href="https://www.linkedin.com/company/starterok" target="_blank" class="ic-linkedin"></a></li>
+        </ul>
+        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#director-message">{{ text_button }}</button>
+      </div>
+      <div class="col-md-3 col-sm-3 col-xs-12">
+        <h3>{{ text_links }}</h3>
+        <ul class="footer__links">
+          <li><a href="{{ contact }}">{{ text_contact }}</a></li>
+          <li><a href="{{ return }}">{{ text_return }}</a></li>
+          <li><a href="{{ sitemap }}">{{ text_sitemap }}</a></li>
+          <li><a href="{{ account }}">{{ text_account }}</a></li>
+        </ul>
+      </div>
+      <div class="col-md-5 col-sm-5 col-xs-12">
+        <h3>{{ text_contacts }}</h3>
+        <ul class="footer__location">
+            <li>
+                <span class="footer__location__name"><strong>{{ text_sales_department }}</strong></span>
+                <span class="footer__location__phone"><a href="tel:{{ text_sales_department_phone_link }}">{{ text_sales_department_phone }}</a></span>
+            </li>
+            {% for key, location in location_list %}
+              {% for location_item in location.shops %}
+                <li>
+                    <span class="footer__location__name"><strong>{{ text_location_city_prefix }} {{ key }}</strong> {{ location_item.name }}</span>
+                    <span class="footer__location__phone"><a href="tel:{{ location_item.fax_link }}">{{ location_item.fax }}</a></span>
+                </li>
+               {% endfor %}  
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<div id="callback" class="modal modal-callback">
+  <form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header modal-callback__header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fas fa-plus-circle"></i></button>
+        <h4 class="modal-title modal-callback__title"><i class="fas fa-phone"></i><i class="fas fa-caret-right"></i>{{ text_callback_header }}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group required">
+            <label for="callback-name" class="control-label">{{ text_message_name }}</label>   
+            <input type="text" name="callback-name" value="" id="callback-name" class="form-control" placeholder="{{ text_placeholder_name }}">
+        </div>
+        <div class="form-group required">
+            <label for="callback-phone" class="control-label">{{ text_callback_phone }}</label>   
+            <input type="text" name="callback-phone" value="" id="callback-phone" class="form-control" placeholder="{{ text_placeholder_phone }}">
+        </div>
+        <div class="form-group">
+            <label for="callback-message" class="control-label">{{ text_callback_message }}</label>   
+            <textarea name="callback-message" id="callback-message" cols="40" rows="1" class="form-control" aria-invalid="false" placeholder="{{ text_placeholder_message }}"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer modal-callback__footer">
+        <button type="button" class="btn-primary modal-callback__btn"><i class="fas fa-share-square"></i>{{ " " }}{{ text_message_button }}</button>
+        <p><i class="fas fa-info-circle"></i>{{ text_callback_note1 }}</p>
+        <p><i class="fas fa-check"></i>{{ text_callback_note2 }}</p>
+      </div>
+    </div>
+  </div>
+  </form>
+  
+  <script>
+$('#content .btn-primary').click(function(e) {
+  $('#content').find('input[name=\'letter_product_id\']').removeClass('product_active');
+  $(this).parent().find('input[name=\'letter_product_id\']').addClass('product_active');
+})
+
+$('#callback .modal-callback__btn').click(function(e) {
+    e.preventDefault();
+
+    var $data;
+	// $data = $(this).parent('form').serialize(); 
+	  $data = $('#callback').find('form').serialize();
+    var letter_product_id;
+//    var ee = $(this).previousElementSibling;
+    letter_product_id = $('#content .product_active').val();
+//    if(ee){
+//      var ee_name = ee.getAttribute('name');
+//      if(ee_name == 'letter_product_id'){
+//        letter_product_id = $(ee).val();
+//      } 
+//    }
+    if((/\d+/.exec(letter_product_id)+0) > 0){
+      
+    } else {
+      letter_product_id = $('input[name=\'letter_product_id\']').val();
+    }
+    if(letter_product_id)
+      $data = $data+'&letter_product_id='+/\d+/.exec(letter_product_id);	
+ // alert('data='+$data);
+    $.ajax({
+        url: 'index.php?route=common/footer/callback',
+        type: 'post',
+        data: $data,
+        dataType: 'json',
+        // beforeSend: function() {
+        	// $('#callback').button('loading');
+		// },
+        // complete: function() {
+            // $('#callback').button('reset');
+        // },
+        success: function(json) {
+            $('.alert-dismissible, .text-danger').remove();
+            $('.form-group').removeClass('has-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#callback .modal-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+
+				// Highlight any found errors
+				/*if(json['error']['name'] == 'callback-name')
+					$('input[name=\'callback-name\']').parent().addClass('has-error');
+				if(json['error']['name'] == 'callback-phone')
+					$('input[name=\'callback-phone\']').parent().addClass('has-error');*/
+                if (json['error']['name']) {
+                    $('#'+ json['error']['name']).closest('.form-group').addClass('has-error');
+                }
+		   } else {
+			   $('#callback').find('.close').click();
+		   }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+
+/*function car_link__click_tmp(e) {
+var url = "Access-Control-Allow-Origin: https://cax.hc-cargo.com/sso/redirect.ashx?apikey=b302a509-8eba-4676-b743-37144a7147d3";
+//var url = "https://cax.hc-cargo.com";
+
+var xhr = new XMLHttpRequest();
+xhr.open("GET", url, true);
+
+xhr.onreadystatechange = function () {
+      if (xhr.status != 200) {
+        // обработать ошибку
+        console.log('Ошибка ' + xhr.status + ': ' + xhr.statusText);
+      } else {
+        // вывести результат
+        console.log(xhr.responseText);
+      }
+
+   // if (xhr.readyState === 4) {
+      // console.log(xhr.status);
+      // console.log(xhr.responseText);
+   // }
+   };
+
+xhr.send();
+};*/
+ 
+/*function car_link__click(){
+	$.ajax({
+		url: 'index.php?route=common/footer/car_link__show',
+		type: 'get',
+//		data: $('input[name=\'product_id\'], input[name=\'quantity\'], select[name=\'recurring_id\']'),
+		dataType: 'json',
+		// beforeSend: function() {
+			// $('#recurring-description').html('');
+		// },
+		success: function(json) {
+			// $('.alert-dismissible, .text-danger').remove();
+
+			// if (json['success']) {
+				// $('#recurring-description').html(json['success']);
+// alert('car_link__click = '+json.length); 
+			if(json.length > 1) {
+				window.open(json, "_blank");
+			}
+			// }
+		}
+	});
+};*/
+  </script>
+  
+</div>
+<div id="director-message" class="modal modal-message">
+  <form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title modal-message__title">{{ text_message_header }}</h4> 
+      </div>
+      <div class="modal-body">
+          <div class="row">
+            <div class="col-md-4 col-xs-6">
+              <div class="form-group required">
+                  <label for="director-message-name" class="control-label">{{ text_message_name }}</label>   
+                  <input type="text" name="director-message-name" value="" id="director-message-name" class="form-control" placeholder="">
+              </div>
+            </div>  
+            <div class="col-md-4 col-xs-6">
+              <div class="form-group">
+                  <label for="director-message-email" class="control-label">{{ text_message_email }}</label>   
+                  <input type="text" name="director-message-email" value="" id="director-message-email" class="form-control" placeholder="">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <label for="director-message-phone" class="control-label">{{ text_message_phone }}</label>   
+                  <input type="text" name="director-message-phone" value="" id="director-message-phone" class="form-control" placeholder="">
+              </div>
+            </div>  
+          </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group required">
+                    <label for="director-message-message" class="control-label">{{ text_message }}</label>   
+                    <textarea name="director-message-message" id="director-message-message" cols="40" rows="1" class="form-control" aria-invalid="false" placeholder=""></textarea>
+                    <div class="small">{{ text_message_note }}</div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-primary">{{ text_message_button }}</button>
+      </div>
+    </div>
+  </div>
+  </form>
+  
+  <script>
+$('#director-message .btn-primary').click(function(e) {
+    // отменяем стандартное поведение браузера
+    e.preventDefault();
+    // переменная, которая будет содержать данные серилизации
+    var $data;
+	$data = $('#director-message').find('form').serialize(); 
+// alert('data='+$data);
+    $.ajax({
+        url: 'index.php?route=common/footer/director_message',
+        type: 'post',
+        data: $data,
+        dataType: 'json',
+        success: function(json) {
+            $('.alert-dismissible, .text-danger').remove();
+            $('.form-group').removeClass('has-error');
+
+            if (json['redirect']) {
+                location = json['redirect'];
+            } else if (json['error']) {
+                $('#director-message .modal-body').prepend('<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> ' + json['error']['warning'] + '<button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+
+				{#if(json['error']['name'] == 'director-message-name')
+					$('input[name=\'director-message-name\']').closest('.form-group').addClass('has-error');
+				if(json['error']['name'] == 'director-message-message')
+					$('input[name=\'director-message-message\']').closest('.form-group').addClass('has-error');#}
+                                        
+                if (json['error']['name']) {
+                    $('#'+ json['error']['name']).closest('.form-group').addClass('has-error');
+                }
+		   } else {
+			   $('#director-message').find('.close').click();
+		   }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+    });
+});
+</script>
+  
+</div>
+<div id="locations" class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header modal-callback__header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fas fa-plus-circle"></i></button>
+        <h4 class="modal-title">{{ text_locations }}</h4>
+      </div>
+      <div class="modal-body">
+          <ul class="location-list">
+              <li class="location-item">
+                  <span class="location__city">{{ text_sales_department }}</span>
+                  <span class="location__phone">
+                      <a href="tel:{{ text_sales_department_phone }}" class="location__phone__link">{{ text_sales_department_phone }}</a>
+                      <a href="viber://chat?number={{ text_sales_department_phone }}" rel="nofollow"><i class="fab fa-viber"></i></a>
+                      <a href="//t.me/{{ text_sales_department_phone }}" rel="nofollow"><i class="fab fa-telegram"></i></a>
+                      <a href="//wa.me/{{ text_sales_department_phone }}" rel="nofollow"><i class="fab fa-whatsapp"></i></a>
+                  </span>
+              </li>
+              {% for key, location in location_list %}
+                  <li class="location-item dropdown"> 
+                      <span class="location__city">
+                          <span>
+                              {% if location.shops_qnt > 1 %}
+                                  {{ text_location_city_prefix2 }} 
+                              {% else %}
+                                  {{ text_location_city_prefix }} 
+                              {% endif %}
+                              {{ key }}
+                          </span>
+                      </span>
+                      <span class="location__phone">
+                          <a href="tel:{{ location.phone }}" class="location__phone__link">{{ location.fax }}</a>
+                          {% if location.viber %}
+                              <a href="viber://chat?number={{ location.viber }}" rel="nofollow"><i class="fab fa-viber"></i></a>
+                          {% endif %}
+                          {% if location.telegram %}
+                              <a href="//t.me/{{ location.telegram }}" rel="nofollow"><i class="fab fa-telegram"></i></a>
+                          {% endif %}
+                          {% if location.whatsapp %}
+                              <a href="//wa.me/{{ location.whatsapp }}" rel="nofollow"><i class="fab fa-whatsapp"></i></a>
+                          {% endif %}
+                          {% if location.skype %}
+                              <a href="skype:{{ location.skype }}?chat"><i class="fab fa-skype"></i> </a>
+                          {% endif %}
+                      </span>
+                      <ul class="location-popup dropdown-menu">
+                          {% for location_item in location.shops %}
+                              <li class="location-popup__item"> 
+                                  <div class="location-popup__name">{{ location_item.name }}{{ " " }}{{ location_item.address }}</div>
+                                  <ul class="location-popup__phone">
+                                      {% for phone_item in location_item.phone %}
+                                          <li class="location-popup__phone__item">
+                                              <a href="tel:{{ phone_item.phone_link }}">{{ phone_item.phone }}</a>
+                                          </li> 
+                                      {% endfor %}  
+                                  </ul>
+                              </li> 
+                          {% endfor %}
+                      </ul> 
+                  </li>
+              {% endfor %}
+          </ul >    
+      </div>
+    </div>
+  </div>
+</div>
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+{% if config_startjivo == '1' %}
+<script src="//code-ya.jivosite.com/widget/wTV8Zs5QQA" async></script>
+{% endif %}
+</body></html>

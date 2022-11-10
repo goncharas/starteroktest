@@ -1,0 +1,132 @@
+{{ header }}
+<div id="information-contact" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+        <h1>{{ heading_title }}</h1>
+        <div class="location-top">
+            <span>{{ text_main_office }}</span><span>{{ location_top_address }}</span>
+        </div>
+        {% set class = ' active' %}
+        <ul class="city-list">
+            {% for location_city in location_city_list %}
+                <li class="city-list__item {{ class }}" data-id="{{ location_city.id }}">{{ location_city.name }}</li>
+                {% set class = '' %}
+            {% endfor %}
+        </ul>  
+        {% set first_wrap = true %}  
+        {% set class = ' active' %}
+        {% for location in location_list %}
+          {% if location.city_link != '' %}
+            {% if not first_wrap %}
+                </div>
+            {% endif %}   
+              <div id="{{ location.city_id }}" class="city-list__tab-item {{ class }}">
+              {% set first_wrap = false %}
+          {% endif %}
+                <div class="location">
+                    <h2 class="locatio__name">{{ location.city }} {{ " " }} {{ location.name }}</h2> 
+                    <div class="location__inner">
+                        {% set class = '' %}
+                        {% if location.youtube %}
+                            {% set class = ' location__row1-bottom' %}
+                        {% endif %}
+                        <div class="location__row1 {{ class }}">
+                            <div class="location__info">
+                                {% if location.address %}
+                                    <div class="location-row location__info__address">
+                                        <span class="location__title">{{ location.location_type }}</span>
+                                        <span class="location__value">{{ location.address }}</span>
+                                    </div>
+                                {% endif %}
+                                {% if location.schedule %}
+                                    <div class="location-row location__info__open">
+                                        <span class="location__value">{{ location.schedule }}</span>
+                                    </div>
+                                {% endif %}
+                                {% if location.email %}
+                                    <div class="location-row location__info__email">
+                                        <span class="location__title">{{ text_email }}</span>
+                                        <span class="location__value">{{ location.email }}</span>
+                                    </div>
+                                {% endif %}
+                                {% if location.youtube %}
+                                    <h3>Как к нам добраться</h3>
+                                    <div class="location__info__video-wrap">
+                                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ location.youtube }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="location__staff">
+                                {% set location_staff = false %}
+                                {% for staff_item in location.staff %}
+                                    {% if staff_item.department_name %}
+                                        {% if location_staff %}
+                                            </ul>
+                                        {% endif %} 
+                                        <h3>{{ staff_item.department_name }}:</h3>
+                                        <ul class="location__staff-list">
+                                    {% endif %}   
+                                    {% set location_staff = true %} 
+                                    <li class="location__staff-list__item">
+                                        <div class="location__staff-list__item__img" style="background-image: url({{ staff_item.img }});">
+                                        </div>
+                                        <div class="location__staff-list__item__info">
+                                            <div class="location__staff-list__item__name">
+                                                {{ staff_item.name }} 
+                                            </div>
+                                            <div class="location__staff-list__item__pos">
+                                                {{ staff_item.pos }}
+                                            </div>
+                                            <ul class="location__staff-list__item__phones">
+                                                {% for phone_item in staff_item.phones %}
+                                                    <li class="location__staff-list__item__phones__item">
+                                                        <a href="tel:{{ phone_item.phone_link }}">{{ phone_item.phone }}</a>
+                                                        {% if phone_item.viber %}
+                                                            <a href="viber://chat?number={{ phone_item.viber }}" class="ic-viber" rel="nofollow"></a>
+                                                        {% endif %}
+                                                        {% if phone_item.telegram %}
+                                                            <a href="//t.me/{{ phone_item.telegram }}" class="ic-telegram" rel="nofollow"></a>
+                                                        {% endif %}
+                                                        {% if phone_item.whatsapp %}
+                                                            <a href="//wa.me/{{ phone_item.whatsapp }}" class="ic-whatsapp" rel="nofollow"></a>
+                                                        {% endif %}
+                                                        {% if phone_item.skype %}
+                                                            <a href="skype:{{ phone_item.skype }}?chat" class="ic-skype mob-only"></a>
+                                                        {% endif %}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </li>
+                                {% endfor %}  
+                                {% if location_staff %}
+                                    </ul>  
+                                {% endif %}    
+                            </div>
+                        </div>
+                        <div class="location__map">
+                            {% if location.google_map_iframe_src %}
+                                <iframe src="{{ location.google_map_iframe_src }}" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>   
+                {% set class = '' %}          
+        {% endfor %}
+        </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

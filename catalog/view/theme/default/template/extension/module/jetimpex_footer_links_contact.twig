@@ -1,0 +1,24 @@
+<div class="">
+	<h3 class="box-heading"><span>{{text_contact}}</span></h3>
+	<div class="box-content footer_box">
+		<address>
+			<ul class="list-unstyled">
+				<li class="footer-invert">
+				<span class="icon-menu icon_addr"></span>
+					<a href="//www.google.com/maps/{{ geocode ? '?q=' ~ geocode|replace({' ' : '+'}) : null }}" target="_blank">{{address}}</a>
+				</li>				
+				<li class="footer-invert phones">
+					<span class="icon-menu icon_phone_foot"></span>
+					<a href="callto:0955900109">(095) 590-01-09</a><br>
+					<a href="callto:0965900109">(096) 590-01-09</a><br>
+					<a href="callto:0973192472">(097) 319-24-72</a><br>
+					<a href="callto:0577040199">(057) 704-01-99</a>
+				</li>
+				<li>
+					<span class="icon-menu icon_mail"></span>
+					<a href="mailto:{{ email }}">{{email}}</a>
+				</li>
+			</ul>
+		</address>
+	</div>
+</div>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html prefix="og: http://ogp.me/ns#" dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html prefix="og: http://ogp.me/ns#" dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html prefix="og: http://ogp.me/ns#" dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<title>{{ title }}</title>
+{% if robots %}
+<meta name="robots" content="{{ robots }}" />
+{% endif %}
+<base href="{{ base }}" />
+{% if description %}
+<meta name="description" content="{{ description }}" />
+{% endif %}
+{% if keywords %}
+<meta name="keywords" content="{{ keywords }}" />
+{% endif %}
+<meta property="og:title" content="{{ title }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ og_url }}" />
+{% if og_image %}
+<meta property="og:image" content="{{ og_image }}" />
+{% else %}
+<meta property="og:image" content="{{ logo }}" />
+{% endif %}
+<meta property="og:site_name" content="{{ name }}" />
+<script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+<link href="//fonts.googleapis.com/css?family=Open+Sans:400,400i,300,700" rel="stylesheet" type="text/css" />
+<link href="catalog/view/theme/default/stylesheet/jetimpex_megamenu.css" rel="stylesheet"/>
+<link href="catalog/view/theme/starterok/stylesheet/stylesheet.css" rel="stylesheet"/>
+<link href="catalog/view/theme/starterok/stylesheet/recom_marki.css" rel="stylesheet"/>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous"/>
+<script src="catalog/view/theme/default/js/jetimpex_megamenu/superfish.min.js" type="text/javascript"></script>
+<script src="catalog/view/theme/default/js/jetimpex_megamenu/jquery.rd-navbar.min.js" type="text/javascript"></script>
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %} 
+<script src="catalog/view/theme/starterok/js/expander.js" type="text/javascript"></script>
+<script src="catalog/view/theme/starterok/js/slick.min.js" type="text/javascript"></script>
+<script src="catalog/view/theme/starterok/js/jquery.nanoscroller.min.js" type="text/javascript"></script>
+<script src="catalog/view/theme/starterok/js/common02.js" type="text/javascript"></script>
+{% for link in links %}
+<link href="{{ link.href }}" rel="{{ link.rel }}" />
+{% endfor %}
+{% for analytic in analytics %}
+{{ analytic }}
+{% endfor %}
+{{ tc_og }}
+</head>
+<body>
+{% for analytic_noscript in analytics_noscript %}
+{{ analytic_noscript }}
+{% endfor %}
+<header class="header">
+    <div class="header-top">
+		<div class="container header__wrap">
+		    <a href="{{ logo_link }}" class="header__logo">
+			    <img src="{{ logo }}" title="{{ name }}" alt="{{ name }}" />
+			</a>
+			<div class="header__menu-wrap">
+			    <nav class="header__menu">{{ header_top }}</nav>
+			    <div id="top-links" class="header__user-menu">
+			        <ul class="header__user-menu-list">
+                      {% if logged %}
+						<li class="header__user-menu__item"><a href="{{ logout }}">{{ text_logout }}</a></li>
+                      {% else %}
+						<li class="header__user-menu__item login"><a href="{{ login }}"><i class="fas fa-user"></i>{{" "}}{{ text_login }}</a></li>
+						<li class="header__user-menu__item registration"><a href="{{ register }}"><i class="fas fa-edit"></i>{{" "}}{{ text_register }}</a></li>
+                      {% endif %}
+					  <li class="header__user-menu__item languages">{{ language }}</li>
+				    </ul>
+			    </div>
+			</div>
+		</div>
+	</div>
+	<div class="header-bottom">
+		<div class="container">
+		    <div class="header-row">	
+			    <div class="select-car">
+                    <a href="{{ mark_link }}" class="select-car__link"><span>{{ text_choicebyauto }}</span></a>
+			    </div>
+			    <div class="search">{{ search }}</div>
+		    </div>	
+		    <div class="header-row">
+		        <div class="header__location">
+		        	<ul class="location-list">
+		        		<li class="location-item">
+		        		    <span class="location__city">{{ text_sales_department }}</span>	
+		        		    <span class="location__phone">
+		        		        <a href="tel:{{ text_sales_department_phone }}" class="location__phone__link">{{ text_sales_department_phone }}</a>
+		        		        <a href="viber://chat?number={{ text_sales_department_phone }}" rel="nofollow"><i class="fab fa-viber"></i></a>
+		        		        <a href="//t.me/{{ text_sales_department_phone }}" rel="nofollow"><i class="fab fa-telegram"></i></a>
+		        		        <a href="//wa.me/{{ text_sales_department_phone }}" rel="nofollow"><i class="fab fa-whatsapp"></i></a>
+		        		    </span>
+		        	    </li>		
+		        		{% for key, location in location_list %}
+                            <li class="location-item dropdown"> 
+                                <span class="location__city">
+                                	<span>
+                                		{% if location.shops_qnt > 1 %}
+                                		    {{ text_location_city_prefix2 }} 
+                                		{% else %}
+                                		    {{ text_location_city_prefix }} 
+                                		{% endif %}
+                                		{{ key }}
+                                	</span>
+                                </span>
+                                <span class="location__phone">
+                                	<a href="tel:{{ location.phone }}" class="location__phone__link">{{ location.fax }}</a>
+                                	{% if location.viber %}
+                                	    <a href="viber://chat?number={{ location.viber }}" rel="nofollow"><i class="fab fa-viber"></i></a>
+                                    {% endif %}
+                                	{% if location.telegram %}
+                                	    <a href="//t.me/{{ location.telegram }}" rel="nofollow"><i class="fab fa-telegram"></i></a>
+                                    {% endif %}
+                                	{% if location.whatsapp %}
+                                	    <a href="//wa.me/{{ location.whatsapp }}" rel="nofollow"><i class="fab fa-whatsapp"></i></a>
+                                    {% endif %}
+                                	{% if location.skype %}
+                                	    <a href="skype:{{ location.skype }}?chat" class="mob-only"><i class="fab fa-skype"></i> </a>
+                                	{% endif %}
+                                </span>
+                                <ul class="location-popup dropdown-menu">
+                                    {% for location_item in location.shops %}
+                                        <li class="location-popup__item"> 
+                                        	<div class="location-popup__name">{{ location_item.name }}{{ " " }}{{ location_item.address }}</div>
+                                        	<ul class="location-popup__phone">
+                                        	    {% for phone_item in location_item.phone %}
+                                        	        <li class="location-popup__phone__item">
+                                        	        	<a href="tel:{{ phone_item.phone_link }}">{{ phone_item.phone }}</a>
+                                        	        </li>	
+                                        	    {% endfor %}	
+                                        	</ul>
+                                        </li>	
+                                    {% endfor %}
+                                </ul>	
+                            </li>
+                        {% endfor %}
+		            </ul >
+		            <a href="#locations" class="header__location__link" data-toggle="modal"><i class="fas fa-map-marker-alt"></i>{{ text_locations }}</a>		
+		        </div> 
+		        {% if 1 == 0 %}
+		        <div class="header__user-service">
+				    <div class="header__prices">
+      	                <a class="header__prices__link" href="{{ login }}">{{ text_prices }}</a>
+                    </div>	
+                    <button class="btn-primary" data-toggle="modal" data-target="#callback" data-caption="{{ text_callback }}">
+                        <i class="fas fa-phone"></i> 
+                        <i class="fas fa-caret-right"></i> 
+                        <span>{{ text_callback }}</span>  
+                    </button>
+		        </div>	
+		        {% endif %}
+		    </div> 
+		    {% if 1 == 0 %}
+		    <div class="header-bottom__test-mode">
+		        {{ text_test_mode }}	
+		    </div>	
+		    {% endif %}
+		</div>
+		<div class="catalog-menu">
+	      <div class="container">	
+		    {{ header_nav }}
+		    <div class="cart-wrap">
+		        {{ cart }}
+		    </div>    
+		  </div>
+		</div>
+	</div>
+</header>
+<!-- {{ menu }} -->

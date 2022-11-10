@@ -1,0 +1,14 @@
+<div class="">
+	<h3 class="box-heading"><span>{{text_account}}</span></h3>
+	<ul class="box-content list-unstyled">
+		{% if (logged) %} 
+			<li><a href="{{ account }}">{{text_account}}</a></li>
+		{% else %} 
+			<li><a href="{{ login }}">{{text_login}}</a></li>
+		{% endif %} 
+		<li><a href="{{ order }}">{{text_order}}</a></li>
+		<li><a href="{{ voucher }}">{{text_voucher}}</a></li>		
+		<li><a href="{{ return }}">{{text_return}}</a></li>
+		
+	</ul>
+</div>
